@@ -22,29 +22,31 @@ struct StageDirector {
     /// 劫云进度条，从 1 降到 0。
     var progress = 1.0
     var revivedThisWave = false
+}
 
-    mutating func enemyKilled(_ w: BattleWorld, _ e: Enemy) {
+extension BattleWorld {
+    /// 敌人死亡对关卡流程的影响。写成 BattleWorld 的方法，避免在 director 的 mutating 方法里再读 director（Swift 独占访问）。
+    func directorEnemyKilled(_ e: Enemy) {
         switch e.role {
         case .boss, .shadow:
-            if w.setup.kind == .boss || w.setup.kind == .shadow {
-                victory = true
-                w.events.append(.slowMo(duration: 0.3, scale: 0.2))
-                w.events.append(.shake(3))
-                w.events.append(.haptic(3))
-                if e.role == .shadow {
-                    w.dropFinalLoot(at: e.pos)
-                    w.events.append(.banner(text: "心魔已斩", duration: 2))
-                }
+            guard setup.kind == .boss || setup.kind == .shadow else { return }
+            director.victory = true
+            events.append(.slowMo(duration: 0.3, scale: 0.2))
+            events.append(.shake(3))
+            events.append(.haptic(3))
+            if e.role == .shadow {
+                dropFinalLoot(at: e.pos)
+                events.append(.banner(text: "心魔已斩", duration: 2))
+            } else {
+                events.append(.banner(text: "\(director.bossName)伏诛", duration: 1.2))
             }
         case .spirit:
-            progress -= w.cfg.bosses.tribulation.progressPerSpirit
+            director.progress -= cfg.bosses.tribulation.progressPerSpirit
         default:
             break
         }
     }
-}
 
-extension BattleWorld {
     // MARK: 流程
 
     func updateDirector() {
@@ -55,7 +57,10 @@ extension BattleWorld {
         switch setup.kind {
         case .normal: updateNormalStage()
         case .boss: updateBossStage()
-        case .tribulation, .shadow: updateTribulation()
+        case .tribulation: updateTribulation()
+        case .shadow:
+            director.spawnAccum += cfg.heartDemon.shadowMinionRate * setup.spawnMult * dt
+            settleSpawns()
         }
     }
 

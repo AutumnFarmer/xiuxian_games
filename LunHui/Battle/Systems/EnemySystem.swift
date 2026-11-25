@@ -333,7 +333,7 @@ extension BattleWorld {
         for sk in skills { sk.enemyKilled(self, e) }
         for h in hooks { h.enemyKilled(self, e) }
         if let hit, case .skill(let s) = hit.source, s >= 0, s < skills.count { skills[s].killedEnemy(self, e, hit: hit) }
-        director.enemyKilled(self, e)
+        directorEnemyKilled(e)
         // 发出者死亡后，它没触发的预警一起消失。爆灵被打死就不会爆。
         for z in zones.indices where zones[z].ownerId == e.id && !zones[z].triggered && zones[z].team == .enemy {
             if e.role == .minion || e.role == .elite { zones[z].dead = true }

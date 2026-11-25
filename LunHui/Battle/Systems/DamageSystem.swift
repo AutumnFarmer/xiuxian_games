@@ -5,7 +5,7 @@ extension BattleWorld {
 
     /// 计算一次命中的伤害和是否暴击，不修改任何状态（除了消耗随机数）。
     func computeDamage(_ hit: Hit, on e: Enemy) -> (Double, Bool) {
-        var inc = 1 + stats.dmgPct + demonDmgPct + tempDmgPct
+        var inc = 1 + stats.dmgPct + demonDmgPct + tempDmgPct + hookDmgPct
         if let el = hit.element { inc += stats.elemPct[el.index] }
         if let s = hit.school { inc += stats.schoolPct[s.index] }
         if e.isEliteOrBoss { inc += stats.elitePct }
@@ -30,7 +30,8 @@ extension BattleWorld {
 
         let affixF = hit.element.map { affixElemMult[$0.index] } ?? 1
         let float = rng.range(cfg.balance.dmgFloatMin, cfg.balance.dmgFloatMax)
-        let dmg = stats.atk * hit.mult * inc * critF * counterF * vuln * affixF * float * globalDmgMult * skillFactor(hit)
+        let atk = tempAtkPct > 0 ? stats.atk / max(0.01, 1 + baseBlock[.atkPct]) * (1 + baseBlock[.atkPct] + tempAtkPct) : stats.atk
+        let dmg = atk * hit.mult * inc * critF * counterF * vuln * affixF * float * globalDmgMult * hookDmgMult * skillFactor(hit)
         return (dmg, crit)
     }
 

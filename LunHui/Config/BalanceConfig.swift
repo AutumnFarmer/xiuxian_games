@@ -11,7 +11,14 @@ struct BalanceConfig: Codable {
         var clearDuration: Double
         var bossIntro: Double
     }
-    struct Caps: Codable { var enemies: Int; var projectiles: Int; var damageTexts: Int; var drops: Int }
+    struct Caps: Codable {
+        var enemies: Int
+        var projectiles: Int
+        var damageTexts: Int
+        var drops: Int
+        /// 自定：区域数量上限（文档没写），防止残留区、血河等堆积过多。
+        var zones: Int
+    }
     struct Ult: Codable { var perKill: Double; var perElite: Double; var perBossPct: Double; var max: Double }
     struct Joystick: Codable { var deadZone: Double; var radius: Double }
 

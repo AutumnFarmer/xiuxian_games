@@ -165,7 +165,7 @@ extension BattleWorld {
         }
         tickZone(i)
         let s = z.skill
-        if s >= 0, s < skills.count { skills[s].zoneTriggered(self, zone: i) }
+        if s >= 0, s < skills.count, z.tag < SkillBase.followUpTag { skills[s].zoneTriggered(self, zone: i) }
     }
 
     private func tickZone(_ i: Int) {

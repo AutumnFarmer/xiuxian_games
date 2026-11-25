@@ -34,6 +34,12 @@ for line in build + test:
 
 # 其他形式的错误（链接、资源、测试失败）
 extra = []
+lines = build + test
+for k, line in enumerate(lines):
+    if line.startswith("Undefined symbols") or line.startswith("ld: "):
+        for t in lines[k:k + 6]:
+            if t.strip() and t.strip() not in extra:
+                extra.append(t.strip())
 for line in build + test:
     s = line.strip()
     if (s.startswith("error:") or " error: " in s and not pat.match(line)) and s not in extra:

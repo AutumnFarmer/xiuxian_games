@@ -68,19 +68,26 @@ extension BattleWorld {
             dropItems(expected: drops_.minionItemChance, source: .minion, minQuality: 0, at: e.pos)
         case .elite:
             dropLingShi(drops_.eliteLingShi * r, at: e.pos)
-            dropItems(expected: drops_.eliteItems, source: .elite, minQuality: 0, at: e.pos)
+            dropItems(expected: drops_.eliteItems * fuyuan, source: .elite, minQuality: 0, at: e.pos)
         case .boss:
             dropLingShi(drops_.bossLingShi * r, at: e.pos)
-            dropItems(expected: drops_.bossItems, source: .boss, minQuality: drops_.bossMinQuality, at: e.pos)
+            dropItems(expected: drops_.bossItems * fuyuan, source: .boss, minQuality: drops_.bossMinQuality, at: e.pos)
         case .shadow, .spirit:
             break
         }
     }
 
+    /// 传说"福缘"：精英和 Boss 掉落的法宝数量 ×2（12.5）。
+    private var fuyuan: Double { lp("L_fuyuan", "mult", 1) }
+
     /// 天劫、心魔影子的掉落（12.3），在最终关胜利时调用。
     func dropFinalLoot(at p: Vec2) {
         dropLingShi(drops_.finalLingShi, at: p)
-        dropItems(expected: drops_.finalItems, source: .final, minQuality: drops_.finalMinQuality, at: p)
+        dropItems(expected: drops_.finalItems * fuyuan, source: .final, minQuality: drops_.finalMinQuality, at: p)
+        // 击败心魔影子额外掉 1 件神品（10.3）
+        if setup.kind == .shadow {
+            dropItems(expected: 1, source: .final, minQuality: cfg.heartDemon.shadowExtraItemQuality, at: p)
+        }
     }
 
     private func popVelocity(_ speed: Double) -> Vec2 {

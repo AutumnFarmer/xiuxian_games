@@ -236,6 +236,7 @@ class SkillBase: HookBase, SkillBehavior {
     @discardableResult
     func zone(_ w: BattleWorld, _ shape: ZoneShape, at p0: Vec2, delay: Double, duration d: Double,
               visual: ZoneVisual, hit: Hit? = nil, follow: Bool = false, tag: Int = 0, tick: Double? = nil) -> Int {
+        guard w.zones.count < w.cfg.balance.caps.zones else { return -1 }
         var z = Zone(id: w.makeId(), team: .player, shape: shape, pos: p0, visual: visual, element: element,
                      followPlayer: follow, delay: delay, delayTotal: delay, duration: d, hit: hit ?? makeHit(w))
         z.tick = tick ?? w.cfg.balance.areaTick
@@ -282,6 +283,9 @@ class SkillBase: HookBase, SkillBehavior {
     func myOrbits(_ w: BattleWorld) -> [Int] {
         w.projectiles.indices.filter { w.projectiles[$0].skill == slot && w.projectiles[$0].motion == .orbit && !w.projectiles[$0].dead }
     }
+
+    /// 由区域派生出来的区域（残留区等）带这个 tag，不会再回调 zoneTriggered，防止无限生成。
+    static let followUpTag = 100
 
     func zoneIndex(_ w: BattleWorld, id: Int) -> Int? {
         w.zones.firstIndex { $0.id == id && !$0.dead }

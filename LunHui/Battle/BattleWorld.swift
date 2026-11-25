@@ -108,8 +108,11 @@ final class BattleWorld {
     var fastCast = false
     /// 心魔影子的行为（8.8）。
     var shadowController: ShadowControlling?
-    /// 御兽：召唤物攻击间隔变化（7.1）。
+    /// 御兽：召唤物攻击间隔变化和数量加成（7.1）。
     var summonIntervalPct = 0.0
+    var summonCountBonus = 0
+    /// 临时攻击%加成（吞噬），每步由技能重新设置。
+    var tempAtkPct = 0.0
     /// 法天象地：体修功法倍率 ×3、范围 ×1.5（7.3）。
     var bodyForm = false
     /// 百兽朝宗：召唤物伤害 ×2（7.3）。
@@ -124,6 +127,14 @@ final class BattleWorld {
     var stageDemonGained = 0
     /// 心魔值变化回调（RunController 用来重算心魔区间）。
     var onHeartDemonChanged: (() -> Void)?
+    /// 挑战类秘境词缀的收益（9.3）。
+    var challengeReward = 0.0
+    var challengeExp = 0.0
+    /// 心魔区间和劫数带来的寻宝加成（10.2、11.4）。
+    var magicFindBonus = 0.0
+    /// 全局传说特效带来的全伤害加成和伤害倍数（五行轮转、杀戮、不死）。
+    var hookDmgPct = 0.0
+    var hookDmgMult = 1.0
     /// 场上活着的敌人数量（3.3 的上限用）。
     var aliveEnemies = 0
 
@@ -202,6 +213,7 @@ final class BattleWorld {
     func step() {
         time += dt
         tempDmgPct = 0
+        tempAtkPct = 0
         updatePlayer()
         if phase == .fighting { updateDirector() }
         rebuildGrid()

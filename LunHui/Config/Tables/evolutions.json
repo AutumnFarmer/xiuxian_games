@@ -12,7 +12,7 @@
     { "id": "ev_lingbao", "name": "灵力潮汐", "skill": "lingbao", "passive": "p_atk", "params": { "fixedEcho": 2, "echoGrow": 0.3 }, "desc": "连爆 3 次，每次半径更大" },
     { "id": "ev_bengshan", "name": "崩天裂地", "skill": "bengshan", "passive": "p_atk", "params": { "allHeavy": 1, "fullCircle": 1 }, "desc": "每一拳都是重拳，360°" },
     { "id": "ev_tiebu", "name": "金刚不坏", "skill": "tiebu", "passive": "p_guard", "params": { "radiusMul": 1.5, "extraReduce": 0.15, "reflectMul": 3, "reflect": 1 }, "desc": "罡气更大，减伤再 +15%，反震 ×3" },
-    { "id": "ev_zhenta", "name": "地裂天崩", "skill": "zhenta", "passive": "p_status", "params": { "fixedAftershocks": 3, "aftershockGrow": 0.2, "aftershockMult": 0.5 }, "desc": "余震 3 次，越来越大" },
+    { "id": "ev_zhenta", "name": "地裂天崩", "skill": "zhenta", "passive": "p_status", "params": { "fixedAftershocks": 3, "aftershockGrow": 0.2 }, "desc": "余震 3 次，越来越大" },
     { "id": "ev_chongzhuang", "name": "蛮荒冲撞", "skill": "chongzhuang", "passive": "p_speed", "params": { "fixedDashes": 4, "trail": 1, "trailMult": 0.5 }, "desc": "连冲 4 次，路径留下裂地" },
     { "id": "ev_huanling", "name": "九尾天狐", "skill": "huanling", "passive": "p_elite", "params": { "merge": 1, "interval": -0.3, "biteRadius": 120 }, "desc": "灵狐合成九尾天狐" },
     { "id": "ev_lingque", "name": "朱雀离火", "skill": "lingque", "passive": "p_proj", "params": { "countMul": 2, "infinitePierce": 1 }, "desc": "灵雀 ×2，火羽无限穿透" },
