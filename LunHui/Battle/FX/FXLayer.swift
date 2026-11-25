@@ -22,7 +22,7 @@ final class FXLayer {
     }
 
     private func makeLabel() -> SKLabelNode {
-        let l = SKLabelNode(fontNamed: "AvenirNext-Heavy")
+        let l = SKLabelNode(fontNamed: "PingFangSC-Semibold")
         l.horizontalAlignmentMode = .center
         l.verticalAlignmentMode = .center
         return l

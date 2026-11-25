@@ -7,7 +7,7 @@ struct CaveView: View {
     @State private var path = NavigationPath()
     @State private var confirmAbandon = false
 
-    enum Dest: Hashable { case fabaoge, lianqi, liandan, cangjing, benming, daoxin, settings }
+    enum Dest: Hashable { case fabaoge, lianqi, liandan, cangjing, benming, daoxin, settings, debug }
 
     var body: some View {
         let cfg = app.config
@@ -43,6 +43,12 @@ struct CaveView: View {
                 case .benming: BenmingView()
                 case .daoxin: DaoXinView()
                 case .settings: SettingsView()
+                case .debug:
+                    #if DEBUG
+                    DebugView()
+                    #else
+                    EmptyView()
+                    #endif
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
@@ -63,6 +69,11 @@ struct CaveView: View {
             HStack {
                 Text("洞府").font(.system(size: 26, weight: .heavy)).foregroundStyle(Color.lhGold)
                 Spacer()
+                #if DEBUG
+                Button { path.append(Dest.debug) } label: {
+                    Image(systemName: "ladybug.fill").font(.system(size: 16)).foregroundStyle(Color.lhSub).frame(width: 44, height: 44)
+                }
+                #endif
                 Button { path.append(Dest.settings) } label: {
                     Image(systemName: "gearshape.fill").font(.system(size: 18)).foregroundStyle(Color.lhSub).frame(width: 44, height: 44)
                 }

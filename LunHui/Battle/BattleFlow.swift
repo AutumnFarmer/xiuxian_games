@@ -26,6 +26,8 @@ final class BattleFlow {
     @ObservationIgnored private var pausedFrom: Phase = .fighting
     @ObservationIgnored private var hudTimer = 0.0
     @ObservationIgnored private var lastDemon = 0
+    /// 每关开始时回调（表现层切换音乐）。
+    @ObservationIgnored var onStageStart: ((StageKind) -> Void)?
 
     var world: BattleWorld { rc.world }
     var cfg: GameConfig { rc.cfg }
@@ -58,6 +60,7 @@ final class BattleFlow {
         }
         preStage = false
         rc.startStage()
+        onStageStart?(world.setup.kind)
         app?.saveRunCheckpoint()
         let i = rc.run.stageIndex
         if i > 0, i % 3 == 0 {
@@ -84,6 +87,7 @@ final class BattleFlow {
         case .dead:
             rc.syncFromWorld()
             phase = .dead
+            onDeath?()
         case .cleared:
             rc.finishStage()
             app?.saveRunCheckpoint()
@@ -168,9 +172,13 @@ final class BattleFlow {
 
     // MARK: 操作
 
+    @ObservationIgnored var onUltimate: (() -> Void)?
+    @ObservationIgnored var onDeath: (() -> Void)?
+
     func castUltimate() {
-        guard phase == .fighting else { return }
+        guard phase == .fighting, rc.ultimate?.canCast(world) == true else { return }
         rc.ultimate?.cast(world)
+        onUltimate?()
         refreshHUD(force: true)
     }
 

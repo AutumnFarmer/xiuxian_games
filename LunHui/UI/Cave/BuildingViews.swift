@@ -23,11 +23,14 @@ struct FabaogeView: View {
     var body: some View {
         let cfg = app.config
         let s = app.save
+        let current = StatAssembler.power(cfg, save: s)
         var items = s.items.filter { filter == nil || $0.slot == filter }
+        var power: [UUID: Double] = [:]
+        for it in items { power[it.id] = powerOf(it) }
         switch sort {
         case 0: items.sort { ($0.qualityIndex(cfg), $0.level) > ($1.qualityIndex(cfg), $1.level) }
         case 1: items.sort { $0.level > $1.level }
-        case 2: items.sort { powerOf($0) > powerOf($1) }
+        case 2: items.sort { (power[$0.id] ?? 0) > (power[$1.id] ?? 0) }
         default: items.sort { $0.obtainedAt > $1.obtainedAt }
         }
         return VStack(spacing: 8) {
@@ -49,7 +52,7 @@ struct FabaogeView: View {
                         } label: {
                             VStack(spacing: 1) {
                                 ItemIcon(item: it, cfg: cfg, size: 60, equipped: s.isEquipped(it))
-                                if !s.isEquipped(it) { PowerDelta(delta: powerOf(it) - StatAssembler.power(cfg, save: s)) }
+                                if !s.isEquipped(it) { PowerDelta(delta: (power[it.id] ?? 0) - current) }
                             }
                         }
                         .buttonStyle(.plain)
@@ -615,7 +618,10 @@ struct SettlementView: View {
                 .padding(.horizontal, 16)
             }
             .lhScreen()
-            .onAppear { withAnimation(.easeOut(duration: 1)) { shown = 1 } }
+            .onAppear {
+                withAnimation(.easeOut(duration: 1)) { shown = 1 }
+                Audio.shared.play(r.cleared ? "victory" : "click")
+            }
         } else {
             Color.lhBg.onAppear { app.leaveSettlement() }
         }

@@ -17,6 +17,8 @@ targets:
     platform: iOS
     sources:
       - path: LunHui
+        excludes:
+          - "Resources/Sounds/*.wav"
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zmc.lunhui

@@ -301,7 +301,11 @@ final class RunController {
 
     func rollInsight() -> [InsightCard] {
         syncFromWorld()
-        return InsightGen.cards(cfg, run: run, cardCount: cardCount, rng: &insightRng)
+        let cards = InsightGen.cards(cfg, run: run, cardCount: cardCount, rng: &insightRng)
+        for c in cards {
+            if case .newSkill(let id, let e) = c, run.skillElements[id] == nil { run.skillElements[id] = e }
+        }
+        return cards
     }
 
     func chooseInsight(_ card: InsightCard) {
@@ -381,6 +385,11 @@ final class RunController {
 
     /// 用本世拾取的法宝替换当前同部位装备。
     func equipFromLoot(_ item: Item) {
+        let reviveBefore = world.stats.revive
+        defer {
+            let d = world.stats.revive - reviveBefore
+            if d != 0 { world.revivesLeft = max(0, world.revivesLeft + d) }
+        }
         if let k = run.equippedSnapshot.firstIndex(where: { $0.slot == item.slot }) {
             run.equippedSnapshot[k] = item
         } else {

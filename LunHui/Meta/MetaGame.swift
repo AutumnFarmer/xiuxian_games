@@ -55,7 +55,7 @@ enum MetaGame {
         var stones = 0.0
         let auto = Set(save.settings.autoSalvageLow ? sc.autoSalvageQualities : [])
         for it in r.loot {
-            if auto.contains(it.quality) {
+            if auto.contains(it.quality), !r.equippedIds.contains(it.id) {
                 stones += ItemForge.salvageValue(cfg, it)
                 salvaged += 1
             } else {

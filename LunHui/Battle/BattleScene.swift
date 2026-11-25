@@ -74,6 +74,16 @@ final class BattleScene: SKScene {
         fx = FXLayer(cfg: flow.cfg.fx)
         fx.damageMode = settings.damageText
         Haptics.shared.enabled = settings.haptics
+        Audio.shared.enabled = settings.sound
+        Audio.shared.playMusic(.battle)
+        flow.onStageStart = { kind in
+            Audio.shared.playMusic(kind == .normal ? .battle : .boss)
+        }
+        flow.onUltimate = { Audio.shared.play("ultimate") }
+        flow.onDeath = {
+            Audio.shared.stopMusic()
+            Audio.shared.play("death")
+        }
         camera = cam
         addChild(cam)
         addChild(worldLayer)
@@ -213,8 +223,10 @@ final class BattleScene: SKScene {
         switch e {
         case .damage(let p, let amount, let crit, let el, let dot, let tid):
             fx.damage(at: p.cg, amount: amount, crit: crit, element: el, dot: dot, targetId: tid)
+            if !dot { Audio.shared.play(crit ? "crit" : "hit") }
         case .enemyDied(_, let p, let el, let role, let r):
             deathsThisFrame += 1
+            Audio.shared.play(role == .boss || role == .shadow ? "boom" : "kill")
             let pieces = flow.cfg.fx.deathPieces
             if deathsThisFrame > pieces.maxFullPerFrame, role == .minion { return }
             switch role {
@@ -232,6 +244,7 @@ final class BattleScene: SKScene {
             break
         case .levelUp(let lv):
             flow.hud.pushBanner("突破！Lv.\(lv)", style: .levelUp, duration: flow.cfg.fx.levelBanner)
+            Audio.shared.play("levelup")
             haptic(1)
         case .nova(let p, let r, let el):
             fx.nova(at: p.cg, radius: CGFloat(r), color: el.map { Palette.element($0) } ?? Palette.gold)
@@ -241,7 +254,9 @@ final class BattleScene: SKScene {
             fx.lightning(from: a.cg, to: b.cg)
         case .skyBolt(let p, let el):
             fx.skyBolt(at: p.cg, color: Palette.element(el))
+            Audio.shared.play(el == .thunder ? "thunder" : "sword")
         case .explosion(let p, let r, let el):
+            Audio.shared.play(r >= 120 ? "boom" : "spell")
             fx.explosion(at: p.cg, radius: CGFloat(r), color: el.map { Palette.element($0) } ?? UIColor(hex: "#FF7043"))
         case .shatter(let p):
             fx.shatter(at: p.cg, color: Palette.element(.ice), pieces: 8, spread: 80)
@@ -255,6 +270,7 @@ final class BattleScene: SKScene {
                 if q >= 5 { cam.run(.sequence([.scale(to: 0.85, duration: 0.12), .scale(to: 1, duration: 0.35)])) }
             }
         case .itemPicked(let q, let name):
+            Audio.shared.play(q >= 5 ? "drop_hundun" : q >= 4 ? "drop_shen" : q >= 3 ? "drop_xian" : "drop_low")
             let d = flow.cfg.fx.drops[safe: q]
             if let d, d.haptic > 0 { haptic(d.haptic) }
             switch q {
@@ -265,9 +281,12 @@ final class BattleScene: SKScene {
             }
         case .bossIntro(let name):
             flow.hud.showBossIntro(name, duration: flow.cfg.balance.stage.bossIntro)
+            Audio.shared.play("boss")
+            Audio.shared.playMusic(.boss)
         case .banner(let text, let dur):
             let style: BannerStyle = text.contains("渡劫成功") || text.contains("心魔已斩") || text.contains("伏诛") ? .victory : .normal
             flow.hud.pushBanner(text, style: style, duration: dur)
+            if style == .victory { Audio.shared.play("victory") }
         case .shake(let lv):
             shake(lv)
         case .haptic(let lv):
@@ -278,6 +297,7 @@ final class BattleScene: SKScene {
             slowMoLeft = d
             slowMoScale = s
         case .revive:
+            Audio.shared.play("ultimate")
             flow.hud.flashScreen(.gold, duration: 0.4)
             flow.hud.pushBanner("涅槃重生", style: .victory, duration: 1.2)
         case .shieldBreak(let p):
@@ -419,6 +439,7 @@ final class BattleScene: SKScene {
             if let x = projNodes[p.id] { n = x } else {
                 n = take(&projPool, parent: projLayer)
                 projNodes[p.id] = n
+                if p.team == .player, p.visual == .sword || p.visual == .wind { Audio.shared.play("sword") }
                 let r = CGFloat(p.radius)
                 switch p.visual {
                 case .sword:
@@ -581,7 +602,12 @@ final class BattleScene: SKScene {
         recycle(&summonNodes, pool: &summonPool)
     }
 
+    private var arrowTimer = 0.0
+
     private func updateLootArrows() {
+        arrowTimer += 1.0 / 60
+        guard arrowTimer >= 0.1 else { return }
+        arrowTimer = 0
         let hw = Double(size.width) / 2 - 20, hh = Double(size.height) / 2 - 40
         var arrows: [LootArrow] = []
         for d in world.drops where d.kind == .item && d.quality >= 3 && !d.dead {

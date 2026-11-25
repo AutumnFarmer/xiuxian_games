@@ -11,12 +11,27 @@ struct LunHuiApp: App {
             RootView()
                 .environment(app)
                 .statusBarHidden(true)
-                .onAppear { if app.route == .loading { app.boot() } }
+                .onAppear {
+                    if app.route == .loading {
+                        Audio.shared.setup()
+                        app.boot()
+                        Audio.shared.enabled = app.save.settings.sound
+                    }
+                }
+                .onChange(of: app.route) { _, r in
+                    switch r {
+                    case .cave, .prepare, .firstLaunch: Audio.shared.playMusic(.cave)
+                    case .settlement: Audio.shared.stopMusic()
+                    default: break
+                    }
+                }
+                .onChange(of: app.save.settings.sound) { _, on in Audio.shared.enabled = on }
+                .onChange(of: app.save.settings.haptics) { _, on in Haptics.shared.enabled = on }
                 .onChange(of: scenePhase) { _, phase in
                     // 3.4：进入后台时立即暂停战斗并存档
+                    // 4.5：run.json 只在关卡开始和过关时写，关内进度不保存
                     if phase != .active {
                         app.battleFlow?.pause()
-                        app.saveRunCheckpoint()
                         app.persist()
                     }
                 }
