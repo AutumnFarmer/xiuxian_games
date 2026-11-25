@@ -19,12 +19,15 @@ enum Palette {
     ]
     static let qualityHex = ["#9E9E9E", "#4CAF50", "#2196F3", "#9C27B0", "#FFC107", "#FF1744"]
 
+    private static let elementColors: [UIColor] = Element.allCases.map { UIColor(hex: elementHex[$0] ?? "#FFFFFF") }
+    private static let qualityColors: [UIColor] = qualityHex.map { UIColor(hex: $0) }
+
     static func element(_ e: Element?) -> UIColor {
         guard let e else { return .white }
-        return UIColor(hex: elementHex[e] ?? "#FFFFFF")
+        return elementColors[e.index]
     }
 
-    static func quality(_ q: Int) -> UIColor { UIColor(hex: qualityHex[max(0, min(5, q))]) }
+    static func quality(_ q: Int) -> UIColor { qualityColors[max(0, min(5, q))] }
 }
 
 extension UIColor {

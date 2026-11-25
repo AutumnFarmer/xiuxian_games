@@ -30,6 +30,7 @@ targets:
         INFOPLIST_KEY_UIRequiresFullScreen: YES
         INFOPLIST_KEY_UIStatusBarHidden: YES
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.role-playing-games
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   LunHuiTests:
     type: bundle.unit-test
     platform: iOS

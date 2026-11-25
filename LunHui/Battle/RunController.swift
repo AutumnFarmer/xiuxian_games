@@ -49,7 +49,13 @@ final class RunController {
                             seed: (run.rngStates["spawn"] ?? run.seed) ^ UInt64(run.stageIndex &* 7919))
         world.lootRng = SeededRandom(seed: (run.rngStates["loot"] ?? run.seed) ^ UInt64(run.stageIndex &* 104729))
         world.rollItem = { [weak self] rng, source, minQ in self?.rollDrop(&rng, source, minQ) }
-        world.onItemPicked = { [weak self] i in self?.pickedThisStage.append(i) }
+        world.onItemPicked = { [weak self] i in
+            guard let self else { return }
+            self.pickedThisStage.append(i)
+            if let it = self.stageLoot[safe: i] {
+                self.world.events.append(.itemPicked(quality: it.qualityIndex(self.cfg), name: it.name))
+            }
+        }
         world.onHeartDemonChanged = { [weak self] in self?.heartDemonChanged() }
         world.level = run.level
         world.exp = run.exp

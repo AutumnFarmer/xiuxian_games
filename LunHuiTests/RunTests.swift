@@ -180,3 +180,75 @@ final class RunTests: XCTestCase {
         XCTAssertTrue(rc.run.cleared)
     }
 }
+
+/// BattleFlow 的流程测试：关卡开始、顿悟、掉落面板、机缘、续玩（4.3、4.5）。
+final class FlowTests: XCTestCase {
+    let cfg = TestConfig.shared
+
+    func testFlowThroughTwoStagesAndResume() {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("lh-flow-\(UUID().uuidString)")
+        let app = AppState(saveManager: SaveManager(directory: dir))
+        app.boot(config: cfg)
+        XCTAssertEqual(app.route, .firstLaunch)
+        app.chooseBenmingShape("sword")
+        XCTAssertEqual(app.route, .cave)
+        let lg = app.save.nextRunPreview.lingGenChoices[0]
+        app.startRun(tier: 1, school: .sword, lingGen: lg, pills: [])
+        XCTAssertEqual(app.route, .battle)
+        let flow = app.battleFlow!
+        flow.world.viewSize = Vec2(440, 956)
+        var stagesCleared = 0
+        var insights = 0
+        var sawLoot = false
+        var sawEvent = false
+        var k = 0
+        while stagesCleared < 2, k < 60 * 400 {
+            k += 1
+            switch flow.phase {
+            case .fighting:
+                flow.world.player.input = Vec2.fromAngle(Double(k) / 100)
+                flow.world.step()
+                flow.world.events.removeAll()
+                flow.afterSteps(1)
+                flow.tickHUD(flow.world.dt)
+            case .insight(let cards):
+                insights += 1
+                flow.chooseInsight(cards[0])
+            case .loot:
+                sawLoot = true
+                stagesCleared += 1
+                if stagesCleared == 2 { break }
+                flow.closeLoot()
+            case .event(let ch):
+                sawEvent = true
+                flow.chooseEvent(ch[0])
+            default:
+                XCTFail("意外的阶段 \(flow.phase)")
+                return
+            }
+        }
+        XCTAssertTrue(sawLoot)
+        XCTAssertTrue(sawEvent)
+        XCTAssertGreaterThan(insights, 2)
+        XCTAssertGreaterThan(flow.hud.kills, 50)
+        // 第 2 关打完后杀掉 App：续玩时应先弹出机缘，再开始第 3 关（4.3）
+        XCTAssertEqual(app.runController?.run.stageIndex, 2)
+        let app2 = AppState(saveManager: SaveManager(directory: dir))
+        app2.boot(config: cfg)
+        XCTAssertTrue(app2.save.hasActiveRun)
+        app2.continueRun()
+        let flow2 = app2.battleFlow!
+        guard case .event(let ch) = flow2.phase else { return XCTFail("续玩应先弹出机缘") }
+        flow2.chooseEvent(ch[0])
+        XCTAssertEqual(flow2.phase, .fighting)
+        XCTAssertEqual(flow2.world.setup.kind, .boss)
+        // 放弃本世，进入结算
+        flow2.pause()
+        flow2.abandon()
+        XCTAssertEqual(app2.route, .settlement)
+        XCTAssertNotNil(app2.lastReport)
+        XCTAssertFalse(app2.save.hasActiveRun)
+        XCTAssertNil(app2.saveManager.loadRun())
+        try? FileManager.default.removeItem(at: dir)
+    }
+}
