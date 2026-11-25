@@ -43,6 +43,7 @@ struct PrepareView: View {
                     Text(cost > 0 ? "出 发（丹药 \(NumberText.format(cost)) 灵石）" : "出 发").frame(maxWidth: .infinity)
                 }
                 .buttonStyle(LHButtonStyle(enabled: ok))
+                .accessibilityIdentifier("prepare-start")
                 .font(.system(size: 18, weight: .heavy))
                 .padding(.horizontal, 14)
                 .padding(.bottom, 10)

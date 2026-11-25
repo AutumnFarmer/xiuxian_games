@@ -67,6 +67,7 @@ struct BattleHUD: View {
                     Image(systemName: "pause.fill").font(.system(size: 16, weight: .bold)).foregroundStyle(.white)
                         .frame(width: 44, height: 44).background(.black.opacity(0.35), in: Circle())
                 }
+                .accessibilityIdentifier("battle-pause")
                 rightInfo.allowsHitTesting(false)
             }
         }
@@ -173,6 +174,7 @@ struct BattleHUD: View {
                 .shadow(color: hud.ultReady ? Color.lhGold.opacity(0.9) : .clear, radius: hud.ultReady ? 12 : 0)
             }
             .disabled(!hud.ultReady)
+            .accessibilityIdentifier("battle-ult")
         }
     }
 

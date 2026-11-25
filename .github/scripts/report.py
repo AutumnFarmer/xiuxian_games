@@ -14,9 +14,10 @@ def esc(s):
 
 root = os.getcwd() + "/"
 build = read("build.log")
-test = read("test.log")
+test = read("test.log") + read("uitest.log")
 bs = os.environ.get("BUILD_STATUS", "?")
 ts = os.environ.get("TEST_STATUS", "skipped")
+us = os.environ.get("UITEST_STATUS", "skipped")
 
 pat = re.compile(r"^(/[^:]+):(\d+):(\d+): (error|warning): (.*)$")
 errors, warnings, seen = [], [], set()
@@ -53,7 +54,7 @@ def emit(kind, title, items, per=15, limit=9):
         print(f"::{kind} title={title} {i // per + 1}::{esc(chunk)}")
 
 xcode = " / ".join(l.strip() for l in read("xcode_version.txt") if l.strip())
-summary = f"build={bs} test={ts} errors={len(errors)} warnings={len(warnings)} extra={len(extra)} | {xcode}"
+summary = f"build={bs} test={ts} uitest={us} errors={len(errors)} warnings={len(warnings)} extra={len(extra)} | {xcode}"
 print(summary)
 print(f"::notice title=RESULT::{summary}")
 emit("error", "compile", errors)
@@ -65,5 +66,5 @@ with open(os.environ.get("GITHUB_STEP_SUMMARY", "/dev/null"), "a") as out:
     for e in errors[:200]:
         out.write(f"- {e}\n")
 
-if bs != "0" or (ts not in ("0", "skipped")):
+if bs != "0" or (ts not in ("0", "skipped")) or (us not in ("0", "skipped")):
     raise SystemExit(1)

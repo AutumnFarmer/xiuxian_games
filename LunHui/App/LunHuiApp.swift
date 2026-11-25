@@ -119,6 +119,7 @@ struct FirstLaunchView: View {
             Spacer()
             Button("踏入轮回") { app.chooseBenmingShape(pick) }
                 .buttonStyle(LHButtonStyle())
+                .accessibilityIdentifier("first-launch-go")
                 .padding(.bottom, 40)
         }
         .padding()

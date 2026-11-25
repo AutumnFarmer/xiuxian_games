@@ -47,6 +47,7 @@ struct InsightOverlay: View {
                     let t = InsightGen.text(flow.cfg, c, run: flow.rc.run)
                     Button { flow.chooseInsight(c) } label: { InsightCardView(t: t) }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier("insight-card-\(i)")
                         .offset(y: appeared ? 0 : 80)
                         .opacity(appeared ? 1 : 0)
                         .animation(.spring(duration: 0.35).delay(Double(i) * 0.06), value: appeared)
@@ -148,6 +149,7 @@ struct LootOverlay: View {
                     }
                 }
                 Button("继续") { flow.closeLoot() }.buttonStyle(LHButtonStyle()).padding(.top, 4)
+                    .accessibilityIdentifier("loot-continue")
             }
             .padding(.horizontal, 18)
         }
@@ -166,7 +168,7 @@ struct EventOverlay: View {
             VStack(spacing: 14) {
                 Text("机 缘").font(.system(size: 30, weight: .heavy)).foregroundStyle(Color.lhGold)
                 Text("心魔 \(flow.rc.run.heartDemon)").font(.caption.bold()).foregroundStyle(Color(hex: "#B388FF"))
-                ForEach(ids, id: \.self) { id in
+                ForEach(Array(ids.enumerated()), id: \.element) { idx, id in
                     if let e = cfg.events.def(id) {
                         let afford = e.costPerRealm == nil || flow.rc.canAfford(e)
                         Button { if afford { flow.chooseEvent(id) } } label: {
@@ -193,6 +195,7 @@ struct EventOverlay: View {
                             .opacity(afford ? 1 : 0.45)
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier("event-\(idx)")
                     }
                 }
             }
@@ -257,6 +260,7 @@ struct PauseOverlay: View {
                         Button("放弃本世") { confirmAbandon = true }.buttonStyle(LHButtonStyle(color: .red, filled: false))
                         Spacer()
                         Button("继续") { flow.resume() }.buttonStyle(LHButtonStyle())
+                            .accessibilityIdentifier("pause-resume")
                     }
                 }
                 .padding(20)
@@ -284,6 +288,7 @@ struct DeathOverlay: View {
                 Text("身死道消，宿慧不灭").foregroundStyle(Color.lhSub)
                 Text("止步 \(flow.rc.stageTitle())").font(.headline).foregroundStyle(Color.lhText)
                 Button("转世") { flow.confirmDeath() }.buttonStyle(LHButtonStyle()).padding(.top, 10)
+                    .accessibilityIdentifier("death-confirm")
             }
         }
     }

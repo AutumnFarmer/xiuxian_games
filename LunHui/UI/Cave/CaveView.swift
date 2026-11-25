@@ -136,8 +136,10 @@ struct CaveView: View {
             if s.hasActiveRun {
                 Button("放弃") { confirmAbandon = true }.buttonStyle(LHButtonStyle(color: .red, filled: false))
                 Button { app.continueRun() } label: { Text("继续本世").frame(maxWidth: .infinity) }.buttonStyle(LHButtonStyle())
+                    .accessibilityIdentifier("cave-continue")
             } else {
                 Button { app.goPrepare() } label: { Text("出 发").frame(maxWidth: .infinity) }.buttonStyle(LHButtonStyle())
+                    .accessibilityIdentifier("cave-depart")
             }
         }
         .font(.system(size: 18, weight: .heavy))

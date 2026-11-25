@@ -6,6 +6,10 @@ import XCTest
 enum TestConfig {
     static let shared: GameConfig = {
         do {
+            // 调数值用：LH_TABLES 指向一份改过的配置表目录
+            if let dir = ProcessInfo.processInfo.environment["LH_TABLES"] {
+                return try GameConfig.load(directory: URL(fileURLWithPath: dir))
+            }
             if let cfg = try? GameConfig.loadBundled() { return cfg }
             let here = URL(fileURLWithPath: #filePath)
             let tables = here.deletingLastPathComponent().deletingLastPathComponent()

@@ -613,6 +613,7 @@ struct SettlementView: View {
                     }
                     Button { app.leaveSettlement() } label: { Text("回到洞府").frame(maxWidth: .infinity) }
                         .buttonStyle(LHButtonStyle())
+                        .accessibilityIdentifier("settlement-done")
                         .padding(.vertical, 10)
                 }
                 .padding(.horizontal, 16)

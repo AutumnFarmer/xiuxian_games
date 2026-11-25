@@ -44,17 +44,31 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.zmc.lunhui.tests
+  LunHuiUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: LunHuiUITests
+    dependencies:
+      - target: LunHui
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.zmc.lunhui.uitests
+        TEST_TARGET_NAME: LunHui
 schemes:
   LunHui:
     build:
       targets:
         LunHui: all
         LunHuiTests: [test]
+        LunHuiUITests: [test]
     run:
       config: Debug
     test:
       config: Debug
       targets:
         - LunHuiTests
+        - LunHuiUITests
     archive:
       config: Release

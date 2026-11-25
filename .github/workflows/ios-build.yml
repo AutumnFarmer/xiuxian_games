@@ -5,10 +5,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-latest
-    timeout-minutes: 40
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
 
@@ -35,18 +38,63 @@ jobs:
           echo "BUILD_STATUS=$?" >> "$GITHUB_ENV"
           tail -5 build.log
 
-      - name: Run unit tests (simulator)
+      - name: Pick simulator
+        if: env.BUILD_STATUS == '0'
+        run: |
+          UDID=$(xcrun simctl list devices available | grep -E "iPhone .*Pro Max" | tail -1 | grep -oE "[0-9A-F-]{36}")
+          if [ -z "$UDID" ]; then UDID=$(xcrun simctl list devices available | grep -E "iPhone" | head -1 | grep -oE "[0-9A-F-]{36}"); fi
+          xcrun simctl list devices available | grep "$UDID" | tee -a xcode_version.txt
+          echo "SIM=$UDID" >> "$GITHUB_ENV"
+
+      - name: Unit tests (simulator)
         if: env.BUILD_STATUS == '0'
         run: |
           set +e
-          UDID=$(xcrun simctl list devices available | grep -E "iPhone .*Pro Max" | head -1 | grep -oE "[0-9A-F-]{36}")
-          if [ -z "$UDID" ]; then UDID=$(xcrun simctl list devices available | grep -E "iPhone" | head -1 | grep -oE "[0-9A-F-]{36}"); fi
-          echo "simulator: $UDID"
           xcodebuild -project LunHui.xcodeproj -scheme LunHui -configuration Debug \
-            -destination "id=$UDID" CODE_SIGNING_ALLOWED=NO test > test.log 2>&1
+            -destination "id=$SIM" -only-testing:LunHuiTests CODE_SIGNING_ALLOWED=NO test > test.log 2>&1
           echo "TEST_STATUS=$?" >> "$GITHUB_ENV"
           tail -15 test.log
 
+      - name: UI smoke test with screenshots
+        if: env.BUILD_STATUS == '0'
+        run: |
+          set +e
+          xcodebuild -project LunHui.xcodeproj -scheme LunHui -configuration Debug \
+            -destination "id=$SIM" -only-testing:LunHuiUITests -resultBundlePath UITest.xcresult \
+            CODE_SIGNING_ALLOWED=NO test > uitest.log 2>&1
+          echo "UITEST_STATUS=$?" >> "$GITHUB_ENV"
+          tail -15 uitest.log
+          mkdir -p shots
+          xcrun xcresulttool export attachments --path UITest.xcresult --output-path shots || true
+          ls -la shots | head -40
+
+      - name: Publish screenshots to ci-screenshots branch
+        if: always() && env.BUILD_STATUS == '0'
+        run: |
+          set -e
+          SHA=$(git rev-parse --short HEAD)
+          mkdir -p /tmp/pub
+          cp -R shots /tmp/pub/shots 2>/dev/null || mkdir -p /tmp/pub/shots
+          cp uitest.log /tmp/pub/uitest.log 2>/dev/null || true
+          cp xcode_version.txt /tmp/pub/ 2>/dev/null || true
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          if git fetch origin ci-screenshots 2>/dev/null; then
+            git checkout -B ci-screenshots origin/ci-screenshots
+          else
+            git checkout --orphan ci-screenshots
+            git rm -rf . > /dev/null 2>&1 || true
+          fi
+          rm -rf latest
+          mkdir -p latest
+          cp -R /tmp/pub/. latest/
+          echo "$SHA" > latest/SOURCE_SHA
+          git add -A latest
+          git commit -m "screenshots for $SHA" || echo "nothing to commit"
+          git push origin HEAD:ci-screenshots
+
       - name: Report
         if: always()
-        run: python3 .github/scripts/report.py
+        run: |
+          git checkout -q ${{ github.sha }} -- .github/scripts/report.py 2>/dev/null || true
+          python3 .github/scripts/report.py

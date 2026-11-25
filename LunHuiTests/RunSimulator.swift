@@ -17,6 +17,7 @@ struct RunSimulator {
         var bossTimes: [Double] = []
         var deathStage = -1
         var result: RunResult?
+        var usedReviveFlag: Bool { result?.usedRevive ?? false }
     }
 
     let cfg: GameConfig
