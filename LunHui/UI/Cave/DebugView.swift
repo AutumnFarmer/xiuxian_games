@@ -48,6 +48,19 @@ struct DebugView: View {
             Section("流派") {
                 Button("解锁全部流派") { app.mutate { $0.unlockedSchools = School.allCases.map(\.rawValue) } }
             }
+            Section("测试开局（下一世生效）") {
+                Stepper("从 \(stageName(app.debugStartStage)) 开始",
+                        value: Binding(get: { app.debugStartStage }, set: { app.debugStartStage = $0 }), in: 0...14)
+                Stepper("开局心魔 \(app.debugStartDemon)",
+                        value: Binding(get: { app.debugStartDemon }, set: { app.debugStartDemon = $0 }), in: 0...100, step: 10)
+                Stepper("开局额外顿悟 \(app.debugExtraInsights) 次",
+                        value: Binding(get: { app.debugExtraInsights }, set: { app.debugExtraInsights = $0 }), in: 0...60, step: 5)
+                Text("心魔值 ≥ 70 时最终关打心魔影子，否则打天劫。跳到后面的关时记得加顿悟次数，不然功法太少。")
+                    .font(.caption).foregroundStyle(Color.lhSub)
+            }
+            Section("显示") {
+                Toggle("战斗中显示帧率和节点数", isOn: Binding(get: { app.debugShowFPS }, set: { app.debugShowFPS = $0 }))
+            }
         }
         .scrollContentBackground(.hidden)
         .navigationTitle("Debug")
@@ -55,6 +68,13 @@ struct DebugView: View {
         .toolbar(.visible, for: .navigationBar)
         .lhScreen()
         .onAppear { tier = app.save.maxTierUnlocked }
+    }
+
+    private func stageName(_ i: Int) -> String {
+        let realm = app.config.enemies.realms[min(4, i / 3)].name
+        if i == 14 { return "\(realm)·最终关" }
+        if i == 13 || (i < 12 && i % 3 == 2) { return "\(realm)·劫关" }
+        return "\(realm)·第 \(i % 3 + 1) 关"
     }
 }
 #endif

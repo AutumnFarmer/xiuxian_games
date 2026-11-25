@@ -5,13 +5,21 @@ import XCTest
 final class RunTests: XCTestCase {
     let cfg = TestConfig.shared
 
+    /// 整世模拟在 iOS 模拟器的 Debug 版里要跑好几分钟。命令行 swift test 会跑；Xcode 里想跑就设环境变量 LH_SLOW=1。
+    func skipSlowOnSimulator() throws {
+        #if os(iOS)
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["LH_SLOW"] != nil, "整世模拟只在命令行 swift test 里跑")
+        #endif
+    }
+
     func freshSave(seed: UInt64 = 1) -> SaveData {
         var r = SeededRandom(seed: seed)
         return MetaGame.newSave(cfg, rng: &r)
     }
 
     // M2：用剑修从练气第 1 关打到通关
-    func testSwordRunTierOne() {
+    func testSwordRunTierOne() throws {
+        try skipSlowOnSimulator()
         let sim = RunSimulator(cfg: cfg, save: freshSave())
         let rep = sim.run(tier: 1, school: .sword, lingGen: LingGen(type: .single, elements: [.fire]), seed: 11)
         print("剑修第 1 劫：关数 \(rep.stagesDone)，等级 \(rep.level)，击杀 \(rep.kills)，用时 \(Int(rep.seconds)) 秒，法宝 \(rep.items)，品质 \(rep.qualityCounts)，Boss 用时 \(rep.bossTimes.map { Int($0) })")
@@ -21,7 +29,8 @@ final class RunTests: XCTestCase {
     }
 
     /// 每个流派都能跑完一世而不出错（M6 的验收前提）。
-    func testEverySchoolRuns() {
+    func testEverySchoolRuns() throws {
+        try skipSlowOnSimulator()
         var save = freshSave()
         save.unlockedSchools = School.allCases.map(\.rawValue)
         for (k, s) in School.allCases.enumerated() {
@@ -33,7 +42,8 @@ final class RunTests: XCTestCase {
     }
 
     // M4：连续 3 世，资源和法宝正确保存
-    func testThreeRunsAndSettlement() {
+    func testThreeRunsAndSettlement() throws {
+        try skipSlowOnSimulator()
         var save = freshSave()
         var rng = SeededRandom(seed: 5)
         for k in 0..<3 {

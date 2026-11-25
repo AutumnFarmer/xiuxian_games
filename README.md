@@ -23,6 +23,8 @@ open LunHui.xcodeproj
 
 以后更新：`git pull`，再 `xcodegen generate`，然后 ⌘R。存档在 App 自己的目录里，重新安装不会丢。
 
+真机测试要看的点见 [测试清单.md](测试清单.md)。
+
 ## 工程结构
 
 ```
@@ -46,13 +48,13 @@ tools/          图标生成脚本
 swift test            # Linux 或 macOS 都行，跑的是核心逻辑测试
 ```
 
-每次推送到 main，GitHub Actions 会在 macOS 上编译 App 并在模拟器里跑全部测试，结果在仓库的 Actions 页面。
+每次推送到 main，GitHub Actions 会在 macOS 上编译 App 并在模拟器里跑单元测试，结果在仓库的 Actions 页面。整世模拟测试在模拟器上太慢，只在命令行 `swift test` 里跑。提交信息里带 `[ui]` 时，CI 还会跑 UI 冒烟测试，截图推到 `ci-screenshots` 分支。
 
 ## 调数值
 
 改 `LunHui/Config/Tables/*.json` 就行，不用动代码。调整顺序按设计文档第 21 章：先调 `balance.json` 的推荐战力和成长曲线，再调 `items.json` 的掉落，最后才调 `skills.json` 里单个功法的倍率。
 
-Debug 版的洞府右上角有一个小虫图标，可以加资源、直接给指定品质和传说特效的法宝、改劫数、解锁全部流派。
+Debug 版的洞府右上角有一个小虫图标，可以加资源、直接给指定品质和传说特效的法宝、改劫数、解锁全部流派、让下一世直接从任意一关开始（测 Boss、天劫、心魔影子），以及在战斗中显示帧率。
 
 ## 和设计文档不一样的地方
 

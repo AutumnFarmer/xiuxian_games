@@ -28,6 +28,13 @@ final class AppState {
     private(set) var battleToken = 0
     private(set) var lastReport: SettlementReport?
 
+    /// Debug 菜单的测试开局（20 章 M7）：下一世从第几关开始、开局心魔值、额外顿悟次数。只在 Debug 版生效。
+    var debugStartStage = 0
+    var debugStartDemon = 0
+    var debugExtraInsights = 0
+    /// Debug：战斗中显示帧率和节点数。
+    var debugShowFPS = false
+
     @ObservationIgnored private(set) var cfg: GameConfig!
     @ObservationIgnored let saveManager: SaveManager
     @ObservationIgnored var metaRng = SeededRandom.fromClock()
@@ -127,7 +134,10 @@ final class AppState {
         save.lastSchool = school.rawValue
         save.lastPills = pills
         let seed = metaRng.next()
-        let run = RunController.newRun(cfg, save: save, tier: tier, school: school, lingGen: lingGen, pills: pills, seed: seed)
+        var run = RunController.newRun(cfg, save: save, tier: tier, school: school, lingGen: lingGen, pills: pills, seed: seed)
+        #if DEBUG
+        applyDebugStart(&run)
+        #endif
         save.hasActiveRun = true
         saveManager.saveRun(run)
         persist()
@@ -143,6 +153,17 @@ final class AppState {
         battleToken += 1
         f.begin()
     }
+
+    #if DEBUG
+    private func applyDebugStart(_ run: inout RunState) {
+        if debugStartStage > 0 {
+            run.stageIndex = min(14, debugStartStage)
+            run.level = 1 + 4 * run.stageIndex
+        }
+        if debugStartDemon > 0 { run.heartDemon = min(cfg.heartDemon.max, debugStartDemon) }
+        run.pendingInsights += debugExtraInsights
+    }
+    #endif
 
     /// 继续本世（4.5）。
     func continueRun() {

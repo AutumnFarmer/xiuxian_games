@@ -56,7 +56,7 @@ jobs:
           tail -15 test.log
 
       - name: UI smoke test with screenshots
-        if: env.BUILD_STATUS == '0'
+        if: env.BUILD_STATUS == '0' && (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[ui]'))
         run: |
           set +e
           xcodebuild -project LunHui.xcodeproj -scheme LunHui -configuration Debug \
@@ -69,7 +69,7 @@ jobs:
           ls -la shots | head -40
 
       - name: Publish screenshots to ci-screenshots branch
-        if: always() && env.BUILD_STATUS == '0'
+        if: always() && env.BUILD_STATUS == '0' && env.UITEST_STATUS != ''
         run: |
           set -e
           SHA=$(git rev-parse --short HEAD)

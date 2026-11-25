@@ -11,7 +11,8 @@ struct BattleView: View {
         GeometryReader { g in
             ZStack {
                 if let scene {
-                    SpriteView(scene: scene, preferredFramesPerSecond: 60, options: [.ignoresSiblingOrder])
+                    SpriteView(scene: scene, preferredFramesPerSecond: 60, options: [.ignoresSiblingOrder],
+                               debugOptions: app.debugShowFPS ? [.showsFPS, .showsNodeCount, .showsDrawCount] : [])
                         .ignoresSafeArea()
                 }
                 if let flow = app.battleFlow {
