@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "initial": { "atk": 100, "hp": 1000, "critRate": 0.05, "critDmg": 1.5, "moveSpeed": 160, "pickup": 80, "revive": 1 },
+  "caps": { "critRate": 1.0, "cdr": 0.6, "moveSpeed": 320, "dmgReduce": 0.75 }
+}

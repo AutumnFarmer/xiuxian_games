@@ -1,0 +1,57 @@
+name: LunHui
+options:
+  bundleIdPrefix: com.zmc
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    DEVELOPMENT_TEAM: X3ZQB66K6X
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  LunHui:
+    type: application
+    platform: iOS
+    sources:
+      - path: LunHui
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zmc.lunhui
+        PRODUCT_NAME: LunHui
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: 轮回录
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UIRequiresFullScreen: YES
+        INFOPLIST_KEY_UIStatusBarHidden: YES
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.role-playing-games
+  LunHuiTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: LunHuiTests
+    dependencies:
+      - target: LunHui
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.zmc.lunhui.tests
+schemes:
+  LunHui:
+    build:
+      targets:
+        LunHui: all
+        LunHuiTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - LunHuiTests
+    archive:
+      config: Release

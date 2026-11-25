@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "themes": [
+    { "id": "forest", "name": "青木林", "element": "wood", "bg": "#1B3A24", "deco": "#2C5236" },
+    { "id": "volcano", "name": "赤焰谷", "element": "fire", "bg": "#3A1A12", "deco": "#5A2618" },
+    { "id": "lake", "name": "寒潭", "element": "water", "bg": "#12263A", "deco": "#1E3E5C" },
+    { "id": "desert", "name": "金沙漠", "element": "metal", "bg": "#3A3012", "deco": "#56481C" },
+    { "id": "canyon", "name": "厚土峡", "element": "earth", "bg": "#2E2418", "deco": "#463626" }
+  ]
+}

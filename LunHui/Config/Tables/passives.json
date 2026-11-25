@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "passives": [
+    { "id": "p_atk", "name": "金刚诀", "perLevel": [ { "stat": "atkPct", "value": 0.10 } ], "desc": "攻击" },
+    { "id": "p_hp", "name": "长生诀", "perLevel": [ { "stat": "hpPct", "value": 0.15 }, { "stat": "regen", "value": 0.003 } ], "desc": "生命与回复" },
+    { "id": "p_crit", "name": "破妄眼", "perLevel": [ { "stat": "critRate", "value": 0.05 } ], "desc": "暴击率" },
+    { "id": "p_critdmg", "name": "斩神意", "perLevel": [ { "stat": "critDmg", "value": 0.20 } ], "desc": "暴击伤害" },
+    { "id": "p_cdr", "name": "静心咒", "perLevel": [ { "stat": "cdr", "value": 0.08 } ], "desc": "冷却缩减" },
+    { "id": "p_area", "name": "天地广", "perLevel": [ { "stat": "area", "value": 0.10 } ], "desc": "范围" },
+    { "id": "p_dur", "name": "久视诀", "perLevel": [ { "stat": "duration", "value": 0.12 } ], "desc": "持续时间" },
+    { "id": "p_proj", "name": "分光术", "levels": [
+        [ { "stat": "projSpeed", "value": 0.10 } ],
+        [ { "stat": "projCount", "value": 1 } ],
+        [ { "stat": "projSpeed", "value": 0.10 } ],
+        [ { "stat": "projCount", "value": 1 } ],
+        [ { "stat": "projSpeed", "value": 0.10 } ]
+      ], "desc": "投射物数量与弹速" },
+    { "id": "p_speed", "name": "神行诀", "perLevel": [ { "stat": "moveSpeed", "value": 0.08 } ], "desc": "移速" },
+    { "id": "p_pickup", "name": "摄物诀", "perLevel": [ { "stat": "pickup", "value": 0.30 } ], "desc": "拾取范围" },
+    { "id": "p_status", "name": "五行诀", "perLevel": [ { "stat": "statusChance", "value": 0.06 }, { "stat": "statusPower", "value": 0.10 } ], "desc": "状态几率与效果" },
+    { "id": "p_elite", "name": "屠龙意", "perLevel": [ { "stat": "elitePct", "value": 0.12 } ], "desc": "精英与 Boss 伤害" },
+    { "id": "p_guard", "name": "不动明王", "perLevel": [ { "stat": "dmgReduce", "value": 0.05 } ], "desc": "减伤" },
+    { "id": "p_luck", "name": "福缘", "perLevel": [ { "stat": "magicFind", "value": 0.10 }, { "stat": "lingShiPct", "value": 0.10 } ], "desc": "寻宝与灵石" },
+    { "id": "p_exp", "name": "悟性", "perLevel": [ { "stat": "expPct", "value": 0.10 } ], "desc": "修为获取" }
+  ]
+}

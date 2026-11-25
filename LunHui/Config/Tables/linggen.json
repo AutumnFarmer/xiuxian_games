@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "types": [
+    { "id": "single", "name": "单灵根", "weight": 40, "elemPct": 0.30, "statusChance": 0.10 },
+    { "id": "dual", "name": "双灵根", "weight": 40, "elemPct": 0.15, "statusChance": 0 },
+    { "id": "variant", "name": "变异灵根", "weight": 15, "elemPct": 0.40, "statusChance": 0.10 },
+    { "id": "five", "name": "五行灵根", "weight": 5, "elemPct": 0, "statusChance": 0 }
+  ],
+  "dualGeneratingBonus": 0.5,
+  "dualCounterMult": 1.5,
+  "fiveGeneratingBonus": 0.5,
+  "fiveCounterMult": 1.5,
+  "choices": 3,
+  "freeRerolls": 1
+}

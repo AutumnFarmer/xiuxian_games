@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "elements": [
+    { "id": "metal", "name": "金", "color": "#E8C547", "statusName": "破绽" },
+    { "id": "wood", "name": "木", "color": "#4CAF50", "statusName": "缠绕" },
+    { "id": "water", "name": "水", "color": "#2196F3", "statusName": "迟缓" },
+    { "id": "fire", "name": "火", "color": "#F4511E", "statusName": "灼烧" },
+    { "id": "earth", "name": "土", "color": "#8D6E63", "statusName": "震晕" },
+    { "id": "thunder", "name": "雷", "color": "#B388FF", "statusName": "感电" },
+    { "id": "ice", "name": "冰", "color": "#80DEEA", "statusName": "冰封" }
+  ],
+  "counters": {
+    "metal": ["wood", "thunder"],
+    "wood": ["earth"],
+    "water": ["fire"],
+    "fire": ["metal"],
+    "earth": ["water", "ice"],
+    "thunder": ["earth", "water", "ice"],
+    "ice": ["fire", "wood", "thunder"]
+  },
+  "generates": { "metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal" },
+  "status": {
+    "flaw": { "vulnPerStack": 0.1, "maxStacks": 3, "duration": 4 },
+    "entangle": { "duration": 1.5, "eliteDuration": 0.75, "bossSlow": 0.3, "bossSlowDuration": 1.5 },
+    "slow": { "amount": 0.3, "maxAmount": 0.7, "duration": 3 },
+    "burn": { "tickPct": 0.1, "ticks": 6, "interval": 0.5 },
+    "stun": { "duration": 0.6, "eliteDuration": 0.3, "bossVuln": 0.1, "bossVulnDuration": 2 },
+    "shock": { "pct": 0.3, "targets": 2, "radius": 150, "markDuration": 2 },
+    "freeze": { "duration": 1.0, "eliteDuration": 0.5, "shatterRadius": 80, "shatterMult": 1.0 }
+  }
+}

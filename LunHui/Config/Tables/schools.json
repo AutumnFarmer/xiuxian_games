@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "schools": [
+    { "id": "sword", "name": "剑修", "desc": "远程飞剑，穿透",
+      "passive": [ { "stat": "projCount", "value": 1 }, { "stat": "projSpeed", "value": 0.2 } ],
+      "startSkill": "yujian", "ultName": "万剑归宗", "ultDesc": "3 秒内落下 60 把巨剑覆盖全屏",
+      "unlock": "initial", "unlockText": "初始解锁" },
+    { "id": "magic", "name": "法修", "desc": "大范围法术",
+      "passive": [ { "stat": "area", "value": 0.2 }, { "stat": "statusChance", "value": 0.1 } ],
+      "startSkill": "lingdan", "ultName": "星河倒悬", "ultDesc": "4 秒内落下 40 颗星辰",
+      "unlock": "initial", "unlockText": "初始解锁" },
+    { "id": "body", "name": "体修", "desc": "近战高伤，皮厚",
+      "passive": [ { "stat": "hpPct", "value": 0.5 }, { "stat": "dmgReduce", "value": 0.1 } ],
+      "startSkill": "bengshan", "ultName": "法天象地", "ultDesc": "变身 10 秒，免疫伤害，体修功法倍率 ×3",
+      "unlock": "initial", "unlockText": "初始解锁" },
+    { "id": "beast", "name": "御兽", "desc": "召唤灵兽替你打",
+      "passive": [], "summonCountBonus": 1, "summonIntervalPct": -0.15,
+      "startSkill": "huanling", "ultName": "百兽朝宗", "ultDesc": "召唤 20 只灵狐，所有召唤物伤害 ×2",
+      "unlock": "firstClear", "unlockText": "第一次通关一世" },
+    { "id": "demon", "name": "魔修", "desc": "吸血，吃心魔变强",
+      "passive": [ { "stat": "lifesteal", "value": 0.03 } ], "heartDemonGain": 1.5, "dmgPctPer10Demon": 0.05,
+      "startSkill": "shihun", "ultName": "天魔解体", "ultDesc": "10 秒内伤害 ×3、冷却减半、免疫伤害",
+      "unlock": "firstShadowKill", "unlockText": "第一次击败心魔影子" }
+  ]
+}

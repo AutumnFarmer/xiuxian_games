@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "cards": 3,
+  "weights": { "skillUp": 30, "newSkill": 20, "passiveUp": 25, "newPassive": 20 },
+  "guaranteeFirst": 2,
+  "guaranteeNewSkills": 2,
+  "freeRerolls": 2,
+  "fallbackLingShi": 50,
+  "fallbackHeal": 0.3
+}

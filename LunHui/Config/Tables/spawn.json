@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "normal": {
+    "startRateBase": 2.5, "startRatePerRealm": 0.5,
+    "endRateBase": 5, "endRatePerRealm": 1,
+    "eliteTimes": [30, 60],
+    "hordeTime": 45, "hordeCount": 40, "hordeRadius": 350
+  },
+  "boss": { "preludeRateBase": 5, "preludeRatePerRealm": 1, "eliteTime": 10, "afterRate": 1.5 },
+  "groupMin": 1,
+  "groupMax": 3,
+  "groupSpread": 40,
+  "offscreenMargin": 60
+}

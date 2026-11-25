@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "common": { "moveInterval": 2.0, "enragedInterval": 1.0, "enrageAt": 0.5, "enrageProjMult": 1.5, "chaseSpeed": 50 },
+  "realmBosses": [
+    { "id": "boss_wolf", "name": "啸月狼王", "radius": 40, "moves": [
+      { "kind": "dash", "name": "扑击", "p": { "width": 60, "length": 300, "telegraph": 0.6, "dashTime": 0.3, "mult": 3 } },
+      { "kind": "summon", "name": "狼嚎", "p": { "count": 8, "typeIndex": 1 } },
+      { "kind": "swipes", "name": "连爪", "p": { "count": 3, "radius": 120, "angle": 90, "telegraph": 0.6, "mult": 2 } }
+    ] },
+    { "id": "boss_spider", "name": "千丝蛛母", "radius": 45, "moves": [
+      { "kind": "webs", "name": "蛛网", "p": { "count": 3, "radius": 70, "duration": 5, "slow": 0.5, "spread": 120, "flightTime": 0.6 } },
+      { "kind": "rain", "name": "毒雨", "p": { "count": 6, "radius": 60, "telegraph": 0.8, "mult": 2.5, "spread": 220 } },
+      { "kind": "summon", "name": "产卵", "p": { "count": 6, "typeIndex": 4 } }
+    ] },
+    { "id": "boss_ape", "name": "赤焰魔猿", "radius": 50, "moves": [
+      { "kind": "rings", "name": "震地", "p": { "count": 3, "width": 70, "telegraph": 0.6, "interval": 0.35, "mult": 3 } },
+      { "kind": "shots", "name": "火拳", "p": { "count": 3, "speed": 300, "radius": 25, "spreadDeg": 15, "mult": 2.5 } },
+      { "kind": "leap", "name": "跃击", "p": { "radius": 150, "telegraph": 0.8, "mult": 4 } }
+    ] },
+    { "id": "boss_puppet", "name": "傀儡老祖", "radius": 45, "moves": [
+      { "kind": "summon", "name": "傀儡阵", "p": { "count": 4, "typeIndex": 2 } },
+      { "kind": "lines", "name": "牵丝", "p": { "count": 8, "width": 20, "length": 500, "telegraph": 0.8, "mult": 3 } },
+      { "kind": "blink", "name": "瞬移", "p": { "distance": 150, "radius": 130, "telegraph": 0.6, "mult": 3.5 } }
+    ] },
+    { "id": "boss_dragon", "name": "九幽魔龙", "radius": 60, "moves": [
+      { "kind": "cone", "name": "龙息", "p": { "radius": 400, "angle": 60, "telegraph": 1.0, "mult": 4 } },
+      { "kind": "rain", "name": "龙鳞雨", "p": { "count": 12, "radius": 50, "telegraph": 0.8, "mult": 2, "spread": 0 } },
+      { "kind": "nova", "name": "摆尾", "p": { "radius": 200, "telegraph": 0.8, "mult": 3, "knockback": 150 } }
+    ] }
+  ],
+  "tribulation": {
+    "waves": 9, "waveDuration": 10,
+    "boltsPerSecond": [2, 2, 2, 3, 3, 3, 4, 4, 6],
+    "aimedOnLastWave": true,
+    "boltRadius": 60, "boltTelegraph": 0.8, "boltMult": 4,
+    "spiritsPerWave": 10, "spiritHpMult": 10, "spiritAtkMult": 2, "spiritSpeed": 80, "spiritRadius": 20,
+    "progressPerSpirit": 0.01, "progressPerWave": 0.08
+  }
+}
