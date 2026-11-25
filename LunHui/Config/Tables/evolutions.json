@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "multFactor": 1.5,
+  "evolutions": [
+    { "id": "ev_yujian", "name": "万剑诀", "skill": "yujian", "passive": "p_proj", "params": { "countMul": 2, "infinitePierce": 1, "returns": 1 }, "desc": "飞剑数量 ×2，无限穿透，飞到最远处后折返" },
+    { "id": "ev_jianzhen", "name": "周天剑阵", "skill": "jianzhen", "passive": "p_dur", "params": { "fixedCount": 8, "orbitRadiusMul": 1.5, "permanent": 1, "launch": 300 }, "desc": "常驻 8 把剑，每转一圈向外射出再收回" },
+    { "id": "ev_jianqi", "name": "开天剑气", "skill": "jianqi", "passive": "p_critdmg", "params": { "directions": 8, "widthMul": 2, "critEcho": 1 }, "desc": "8 个方向同时斩出，暴击时追加一次" },
+    { "id": "ev_feijianyu", "name": "天外飞仙", "skill": "feijianyu", "passive": "p_area", "params": { "fixedCount": 15, "residue": 1, "residueDuration": 2, "residueMult": 0.3 }, "desc": "每次 15 把，落点留下剑气区" },
+    { "id": "ev_lingdan", "name": "灵弹风暴", "skill": "lingdan", "passive": "p_cdr", "params": { "fixedCooldown": 0.3, "explodeRadiusMul": 1.5 }, "desc": "冷却 0.3 秒，爆炸半径 ×1.5" },
+    { "id": "ev_luoxing", "name": "陨星天降", "skill": "luoxing", "passive": "p_area", "params": { "fixedCount": 5, "radiusMul": 1.5, "residue": 1, "residueMultMul": 2 }, "desc": "每次 5 颗，半径 ×1.5，残留区倍率 ×2" },
+    { "id": "ev_lingzhen", "name": "周天星斗阵", "skill": "lingzhen", "passive": "p_status", "params": { "permanent": 1, "radiusMul": 1.5, "forceStatus": 1 }, "desc": "常驻，阵内必定施加元素状态" },
+    { "id": "ev_lingbao", "name": "灵力潮汐", "skill": "lingbao", "passive": "p_atk", "params": { "fixedEcho": 2, "echoGrow": 0.3 }, "desc": "连爆 3 次，每次半径更大" },
+    { "id": "ev_bengshan", "name": "崩天裂地", "skill": "bengshan", "passive": "p_atk", "params": { "allHeavy": 1, "fullCircle": 1 }, "desc": "每一拳都是重拳，360°" },
+    { "id": "ev_tiebu", "name": "金刚不坏", "skill": "tiebu", "passive": "p_guard", "params": { "radiusMul": 1.5, "extraReduce": 0.15, "reflectMul": 3, "reflect": 1 }, "desc": "罡气更大，减伤再 +15%，反震 ×3" },
+    { "id": "ev_zhenta", "name": "地裂天崩", "skill": "zhenta", "passive": "p_status", "params": { "fixedAftershocks": 3, "aftershockGrow": 0.2, "aftershockMult": 0.5 }, "desc": "余震 3 次，越来越大" },
+    { "id": "ev_chongzhuang", "name": "蛮荒冲撞", "skill": "chongzhuang", "passive": "p_speed", "params": { "fixedDashes": 4, "trail": 1, "trailMult": 0.5 }, "desc": "连冲 4 次，路径留下裂地" },
+    { "id": "ev_huanling", "name": "九尾天狐", "skill": "huanling", "passive": "p_elite", "params": { "merge": 1, "interval": -0.3, "biteRadius": 120 }, "desc": "灵狐合成九尾天狐" },
+    { "id": "ev_lingque", "name": "朱雀离火", "skill": "lingque", "passive": "p_proj", "params": { "countMul": 2, "infinitePierce": 1 }, "desc": "灵雀 ×2，火羽无限穿透" },
+    { "id": "ev_bimang", "name": "青蛟", "skill": "bimang", "passive": "p_dur", "params": { "permanent": 1, "follow": 1, "radiusMul": 1.5, "breath": 1 }, "desc": "常驻跟随，周期吐息" },
+    { "id": "ev_xuangui", "name": "玄武", "skill": "xuangui", "passive": "p_hp", "params": { "merge": 1, "radiusMul": 2, "fixedReduce": 0.2, "healPct": 0.01 }, "desc": "合成玄武，减伤 20%，砸地回血" },
+    { "id": "ev_shihun", "name": "天魔爪", "skill": "shihun", "passive": "p_critdmg", "params": { "fullCircle": 1, "fixedHits": 3, "critLifesteal": 2 }, "desc": "360°，连抓 3 次" },
+    { "id": "ev_xuehe", "name": "血海", "skill": "xuehe", "passive": "p_hp", "params": { "widthMul": 2, "durationMul": 2, "standRegen": 0.03 }, "desc": "宽度和持续 ×2，站上去回血" },
+    { "id": "ev_mohuo", "name": "九幽魔焰", "skill": "mohuo", "passive": "p_status", "params": { "generations": 3, "forceStatus": 1 }, "desc": "分裂 3 代，必定施加状态" },
+    { "id": "ev_xinmozhan", "name": "心魔噬天", "skill": "xinmozhan", "passive": "p_elite", "params": { "radiusMul": 1.3, "demonPerSlash": 1, "demonCapPerStage": 10 }, "desc": "斩击叠加心魔值" },
+    { "id": "ev_leiyin", "name": "九天神雷", "skill": "leiyin", "passive": "p_crit", "params": { "fixedTargets": 10, "forceStatus": 1 }, "desc": "每次 10 道，必定施加状态" },
+    { "id": "ev_huoyun", "name": "焚天云海", "skill": "huoyun", "passive": "p_dur", "params": { "fixedCount": 5, "permanent": 1, "follow": 1, "spread": 200 }, "desc": "常驻 5 片云跟随玩家" },
+    { "id": "ev_xuanguang", "name": "太虚玄光", "skill": "xuanguang", "passive": "p_guard", "params": { "fixedShield": 0.5, "fixedCooldown": 4, "radiusMul": 2 }, "desc": "护盾 50%，冷却 4 秒" },
+    { "id": "ev_fengren", "name": "天风刃", "skill": "fengren", "passive": "p_speed", "params": { "directions": 8, "infinitePierce": 1 }, "desc": "8 方向齐射，无限穿透" }
+  ]
+}

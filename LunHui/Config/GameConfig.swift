@@ -14,6 +14,8 @@ final class GameConfig {
     let spawn: SpawnConfig
     let bosses: BossesConfig
     let themes: ThemesConfig
+    let items: ItemsConfig
+    let evolutions: EvolutionsConfig
 
     private init(dir: URL?) throws {
         balance = try GameConfig.load("balance", dir)
@@ -32,6 +34,8 @@ final class GameConfig {
         spawn = try GameConfig.load("spawn", dir)
         bosses = try GameConfig.load("bosses", dir)
         themes = try GameConfig.load("themes", dir)
+        items = try GameConfig.load("items", dir)
+        evolutions = try GameConfig.load("evolutions", dir)
         try validate()
     }
 
@@ -40,6 +44,9 @@ final class GameConfig {
 
     /// 从指定目录加载（命令行测试用）。
     static func load(directory: URL) throws -> GameConfig { try GameConfig(dir: directory) }
+
+    /// 神通倍率系数（7.8）。
+    func evolutionsMultFactor() throws -> Double { evolutions.multFactor }
 
     struct ConfigError: Error, CustomStringConvertible {
         var description: String
@@ -111,6 +118,13 @@ final class GameConfig {
             problems.append("enemies.json: realmWeights 的长度和小怪类型数不一致")
         }
         if enemies.realmWeights.count != 5 { problems.append("enemies.json: realmWeights 应有 5 项") }
+        if items.qualities.count != 6 { problems.append("items.json: 品质应有 6 档") }
+        if items.slots.count != ItemSlot.allCases.count { problems.append("items.json: 部位数量不对") }
+        dupCheck("items.json affixes", items.affixes.map(\.id))
+        for ev in evolutions.evolutions {
+            if skills.def(ev.skill) == nil { problems.append("evolutions.json: \(ev.id) 引用的功法 \(ev.skill) 不存在") }
+            if passives.def(ev.passive) == nil { problems.append("evolutions.json: \(ev.id) 引用的心法 \(ev.passive) 不存在") }
+        }
         if !problems.isEmpty {
             throw ConfigError(description: "配置校验失败：\n" + problems.joined(separator: "\n"))
         }
