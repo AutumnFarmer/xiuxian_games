@@ -175,6 +175,8 @@ final class BattleFlow {
     }
 
     func chooseInsight(_ card: InsightCard) {
+        // 连点时第二次点击可能落在旧卡上，只接受当前这组卡（防止重复获得）
+        guard case .insight(let cards) = phase, cards.contains(card) else { return }
         rc.chooseInsight(card)
         if preStage {
             beginStage()
@@ -188,7 +190,7 @@ final class BattleFlow {
     }
 
     func rerollInsight() {
-        guard let cards = rc.rerollInsight() else { return }
+        guard case .insight = phase, let cards = rc.rerollInsight() else { return }
         phase = .insight(cards)
     }
 
@@ -200,6 +202,7 @@ final class BattleFlow {
     }
 
     func closeLoot() {
+        guard case .loot = phase else { return }
         if let ch = rc.run.pendingEventChoices, !ch.isEmpty {
             phase = .event(ch)
         } else {
@@ -208,6 +211,7 @@ final class BattleFlow {
     }
 
     func chooseEvent(_ id: String) {
+        guard case .event(let ids) = phase, ids.contains(id) else { return }
         gainedItem = rc.chooseEvent(id)
         app?.saveRunCheckpoint()
         beginStage()
@@ -226,12 +230,14 @@ final class BattleFlow {
 
     /// 暂停菜单里的"放弃本世"（4.5）。
     func abandon() {
+        guard phase == .paused || phase == .dead else { return }
         phase = .finished
         app?.endRun()
     }
 
     /// 死亡后点"转世"。
     func confirmDeath() {
+        guard phase == .dead else { return }
         phase = .finished
         app?.endRun()
     }

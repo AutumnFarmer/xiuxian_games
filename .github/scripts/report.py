@@ -52,7 +52,8 @@ def emit(kind, title, items, per=15, limit=9):
         chunk = "\n".join(items[i:i + per])[:3800]
         print(f"::{kind} title={title} {i // per + 1}::{esc(chunk)}")
 
-summary = f"build={bs} test={ts} errors={len(errors)} warnings={len(warnings)} extra={len(extra)}"
+xcode = " / ".join(l.strip() for l in read("xcode_version.txt") if l.strip())
+summary = f"build={bs} test={ts} errors={len(errors)} warnings={len(warnings)} extra={len(extra)} | {xcode}"
 print(summary)
 print(f"::notice title=RESULT::{summary}")
 emit("error", "compile", errors)

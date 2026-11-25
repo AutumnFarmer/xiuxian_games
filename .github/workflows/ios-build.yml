@@ -18,7 +18,8 @@ jobs:
           XC=$(ls -d /Applications/Xcode_*.app 2>/dev/null | grep -vi beta | sort -V | tail -1)
           if [ -z "$XC" ]; then XC=$(ls -d /Applications/Xcode*.app | sort -V | tail -1); fi
           sudo xcode-select -s "$XC"
-          xcodebuild -version
+          xcodebuild -version | tee xcode_version.txt
+          xcrun simctl list runtimes | grep -i ios | tail -3 | tee -a xcode_version.txt
 
       - name: Install XcodeGen
         run: brew install xcodegen

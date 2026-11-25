@@ -181,6 +181,17 @@ final class RunTests: XCTestCase {
     }
 }
 
+#if os(iOS)
+/// iOS 上配置表必须打包进 App（19.1）。
+final class BundleTests: XCTestCase {
+    func testBundledConfigLoads() throws {
+        let cfg = try GameConfig.loadBundled()
+        XCTAssertEqual(cfg.skills.skills.count, 24)
+        XCTAssertEqual(cfg.legendaries.legendaries.count, 30)
+    }
+}
+#endif
+
 /// BattleFlow 的流程测试：关卡开始、顿悟、掉落面板、机缘、续玩（4.3、4.5）。
 final class FlowTests: XCTestCase {
     let cfg = TestConfig.shared
@@ -240,6 +251,8 @@ final class FlowTests: XCTestCase {
         let flow2 = app2.battleFlow!
         guard case .event(let ch) = flow2.phase else { return XCTFail("续玩应先弹出机缘") }
         flow2.chooseEvent(ch[0])
+        // 机缘可能给顿悟（古修洞府、古魔残魂），顿悟在关卡开始前弹出
+        while case .insight(let cards) = flow2.phase { flow2.chooseInsight(cards[0]) }
         XCTAssertEqual(flow2.phase, .fighting)
         XCTAssertEqual(flow2.world.setup.kind, .boss)
         // 放弃本世，进入结算

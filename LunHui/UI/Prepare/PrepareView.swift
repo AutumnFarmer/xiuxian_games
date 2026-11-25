@@ -284,25 +284,37 @@ struct RepeatButton: View {
     var symbol: String
     var action: () -> Void
     @State private var timer: Timer?
+    @State private var pressed = false
 
     var body: some View {
         Image(systemName: symbol)
             .font(.system(size: 20, weight: .heavy))
             .foregroundStyle(Color.lhGold)
             .frame(width: 52, height: 52)
-            .background(Color.white.opacity(0.06), in: Circle())
+            .background(Color.white.opacity(pressed ? 0.16 : 0.06), in: Circle())
             .contentShape(Circle())
-            .onTapGesture { action() }
-            .onLongPressGesture(minimumDuration: 0.35, perform: {}, onPressingChanged: { pressing in
-                timer?.invalidate()
-                timer = nil
-                guard pressing else { return }
-                let start = Date()
-                timer = Timer.scheduledTimer(withTimeInterval: 0.08, repeats: true) { _ in
-                    guard Date().timeIntervalSince(start) > 0.35 else { return }
-                    DispatchQueue.main.async { action() }
-                }
-            })
+            .scaleEffect(pressed ? 0.92 : 1)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        guard !pressed else { return }
+                        pressed = true
+                        action()
+                        let start = Date()
+                        let t = Timer(timeInterval: 0.08, repeats: true) { _ in
+                            if Date().timeIntervalSince(start) > 0.4 { action() }
+                        }
+                        RunLoop.main.add(t, forMode: .common)
+                        timer?.invalidate()
+                        timer = t
+                    }
+                    .onEnded { _ in
+                        pressed = false
+                        timer?.invalidate()
+                        timer = nil
+                    }
+            )
+            .onDisappear { timer?.invalidate() }
     }
 }
 
