@@ -295,7 +295,7 @@ extension BattleWorld {
     // MARK: 死亡
 
     /// 敌人死亡：掉落、真元、修为、分裂、碎裂等。cleared 表示清场爆碎。
-    func killEnemy(_ i: Int, cleared: Bool = false) {
+    func killEnemy(_ i: Int, cleared: Bool = false, by hit: Hit? = nil) {
         guard !enemies[i].dead else { return }
         enemies[i].dead = true
         enemies[i].hp = min(0, enemies[i].hp)
@@ -331,6 +331,8 @@ extension BattleWorld {
             zones.append(enemyZone(.circle(50), at: e.pos, telegraph: 0.6, damage: e.atk))
         }
         for sk in skills { sk.enemyKilled(self, e) }
+        for h in hooks { h.enemyKilled(self, e) }
+        if let hit, case .skill(let s) = hit.source, s >= 0, s < skills.count { skills[s].killedEnemy(self, e, hit: hit) }
         director.enemyKilled(self, e)
         // 发出者死亡后，它没触发的预警一起消失。爆灵被打死就不会爆。
         for z in zones.indices where zones[z].ownerId == e.id && !zones[z].triggered && zones[z].team == .enemy {

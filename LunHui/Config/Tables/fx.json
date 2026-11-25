@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "damageText": {
+    "rise": 40, "life": 0.6, "normalSize": 14, "critSize": 20, "dotSize": 11, "critPop": 1.4,
+    "mergeWindow": 0.2, "max": 60
+  },
+  "shake": [
+    { "amp": 0, "time": 0 },
+    { "amp": 3, "time": 0.1 },
+    { "amp": 6, "time": 0.2 },
+    { "amp": 12, "time": 0.4 }
+  ],
+  "haptic": { "minInterval": 0.1 },
+  "drops": [
+    { "pillar": 0, "ring": false, "hitStop": 0, "banner": "", "haptic": 0 },
+    { "pillar": 0, "ring": false, "hitStop": 0, "banner": "", "haptic": 0 },
+    { "pillar": 0, "ring": true, "hitStop": 0, "banner": "", "haptic": 1 },
+    { "pillar": 1.0, "ring": true, "hitStop": 0, "banner": "获得仙品", "haptic": 2 },
+    { "pillar": 2.0, "ring": true, "hitStop": 0.1, "banner": "神品出世！", "haptic": 3 },
+    { "pillar": 2.0, "ring": true, "hitStop": 0.2, "banner": "混沌至宝！", "haptic": 4 }
+  ],
+  "deathPieces": { "minion": 5, "elite": 12, "boss": 40, "maxFullPerFrame": 20 },
+  "levelBanner": 0.8,
+  "realmBanner": 1.5
+}

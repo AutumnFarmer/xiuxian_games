@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "daoxin": {
+    "costBase": 100,
+    "costGrowth": 1.08,
+    "points": [
+      { "id": "dx_atk", "name": "攻击", "stat": "atkFlat", "value": 2, "scales": true },
+      { "id": "dx_hp", "name": "生命", "stat": "hpFlat", "value": 20, "scales": true },
+      { "id": "dx_crit", "name": "暴击伤害", "stat": "critDmg", "value": 0.02 },
+      { "id": "dx_dmg", "name": "全伤害", "stat": "dmgPct", "value": 0.015 },
+      { "id": "dx_mf", "name": "寻宝", "stat": "magicFind", "value": 0.01 },
+      { "id": "dx_ls", "name": "灵石", "stat": "lingShiPct", "value": 0.015 }
+    ]
+  },
+  "upgrades": [
+    { "id": "cj_cards", "building": "cangjing", "name": "顿悟选项", "desc": "顿悟卡 +1 张（3 张变 4 张）", "max": 1, "costBase": 5000, "costPow": 0 },
+    { "id": "cj_reroll", "building": "cangjing", "name": "顿悟刷新", "desc": "每世免费刷新 +1 次", "max": 5, "costBase": 1000, "costPow": 2 },
+    { "id": "cj_start", "building": "cangjing", "name": "起手功法", "desc": "开局额外 1 次顿悟", "max": 3, "costBase": 3000, "costPow": 2 },
+    { "id": "cj_skill", "building": "cangjing", "name": "功法精进", "desc": "开局初始功法 +1 级", "max": 2, "costBase": 8000, "costPow": 2 },
+    { "id": "cj_revive", "building": "cangjing", "name": "复活", "desc": "每世复活次数 +1", "max": 2, "costBase": 20000, "costPow": 2 },
+    { "id": "lq_capacity", "building": "lianqi", "name": "法宝阁扩容", "desc": "容量 +100", "max": 0, "costBase": 2000, "costPow": 1 },
+    { "id": "lq_discount", "building": "lianqi", "name": "洗练折扣", "desc": "洗练和重铸花费 −5%", "max": 6, "costBase": 3000, "costPow": 2 }
+  ],
+  "pills": [
+    { "id": "pill_atk", "name": "大力丸", "desc": "攻击 +30%", "price": 200, "mods": [ { "stat": "atkPct", "value": 0.30 } ] },
+    { "id": "pill_hp", "name": "培元丹", "desc": "生命 +40%", "price": 200, "mods": [ { "stat": "hpPct", "value": 0.40 } ] },
+    { "id": "pill_crit", "name": "破境丹", "desc": "暴击率 +10%，暴击伤害 +30%", "price": 300, "mods": [ { "stat": "critRate", "value": 0.10 }, { "stat": "critDmg", "value": 0.30 } ] },
+    { "id": "pill_exp", "name": "悟道丹", "desc": "修为获取 +50%", "price": 300, "mods": [ { "stat": "expPct", "value": 0.50 } ] },
+    { "id": "pill_mf", "name": "寻宝丹", "desc": "寻宝 +50%", "price": 400, "mods": [ { "stat": "magicFind", "value": 0.50 } ] },
+    { "id": "pill_ls", "name": "聚灵丹", "desc": "灵石获取 +50%", "price": 250, "mods": [ { "stat": "lingShiPct", "value": 0.50 } ] },
+    { "id": "pill_demon", "name": "心魔丹", "desc": "开局心魔值 +30", "price": 300, "demon": 30 }
+  ],
+  "pillPriceTierBonus": 0.1,
+  "maxPills": 2,
+  "baseCapacity": 300,
+  "capacityPerLevel": 100,
+  "discountPerLevel": 0.05,
+  "recastMult": 3
+}

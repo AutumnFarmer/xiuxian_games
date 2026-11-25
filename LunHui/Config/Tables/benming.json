@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "costBase": 20,
+  "costPerLevel": 5,
+  "multPerLevel": 0.02,
+  "strikeBase": 3.0,
+  "strikePerLevel": 0.1,
+  "strikeInterval": 8,
+  "strikeRadius": 100,
+  "strikeRange": 600,
+  "strikeMinInterval": 3,
+  "strikeStatusChance": 0.3,
+  "awakenEvery": 10,
+  "awakenChoices": 3,
+  "nameMaxLength": 8,
+  "shapes": [
+    { "id": "sword", "name": "剑" },
+    { "id": "seal", "name": "印" },
+    { "id": "cauldron", "name": "鼎" },
+    { "id": "mirror", "name": "镜" }
+  ],
+  "awakenings": [
+    { "id": "bm_crit", "name": "锋芒", "desc": "暴击伤害 +15%", "mods": [ { "stat": "critDmg", "value": 0.15 } ] },
+    { "id": "bm_dmg", "name": "杀意", "desc": "全伤害 +10%", "mods": [ { "stat": "dmgPct", "value": 0.10 } ] },
+    { "id": "bm_elite", "name": "屠魔", "desc": "精英与 Boss 伤害 +12%", "mods": [ { "stat": "elitePct", "value": 0.12 } ] },
+    { "id": "bm_elem", "name": "元素亲和", "desc": "系伤害 +15%", "mods": [ { "stat": "elemPct", "value": 0.15 } ], "randomElement": true },
+    { "id": "bm_hp", "name": "不灭", "desc": "生命 +12%", "mods": [ { "stat": "hpPct", "value": 0.12 } ] },
+    { "id": "bm_area", "name": "浩瀚", "desc": "范围 +5%", "mods": [ { "stat": "area", "value": 0.05 } ] },
+    { "id": "bm_cdr", "name": "灵动", "desc": "冷却缩减 +3%", "mods": [ { "stat": "cdr", "value": 0.03 } ] },
+    { "id": "bm_mf", "name": "福泽", "desc": "寻宝 +8%", "mods": [ { "stat": "magicFind", "value": 0.08 } ] },
+    { "id": "bm_exp", "name": "灵慧", "desc": "修为获取 +8%", "mods": [ { "stat": "expPct", "value": 0.08 } ] },
+    { "id": "bm_ls", "name": "聚宝", "desc": "灵石获取 +8%", "mods": [ { "stat": "lingShiPct", "value": 0.08 } ] },
+    { "id": "bm_guard", "name": "坚守", "desc": "减伤 +2%", "mods": [ { "stat": "dmgReduce", "value": 0.02 } ] },
+    { "id": "bm_strike", "name": "本命通神", "desc": "本命一击冷却 −0.5 秒，伤害 +30%", "strikeCdr": 0.5, "strikeDmg": 0.3 }
+  ],
+  "colors": [
+    { "from": 1, "color": "#E0E0E0" },
+    { "from": 50, "color": "#4CAF50" },
+    { "from": 100, "color": "#2196F3" },
+    { "from": 150, "color": "#9C27B0" },
+    { "from": 200, "color": "#FFC107" },
+    { "from": 300, "color": "#FF1744" }
+  ]
+}

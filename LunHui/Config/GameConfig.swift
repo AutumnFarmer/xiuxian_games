@@ -16,6 +16,14 @@ final class GameConfig {
     let themes: ThemesConfig
     let items: ItemsConfig
     let evolutions: EvolutionsConfig
+    let settlement: SettlementConfig
+    let cave: CaveConfig
+    let events: EventsConfig
+    let benming: BenmingConfig
+    let heartDemon: HeartDemonConfig
+    let dungeonAffixes: DungeonAffixesConfig
+    let legendaries: LegendariesConfig
+    let fx: FXConfig
 
     private init(dir: URL?) throws {
         balance = try GameConfig.load("balance", dir)
@@ -36,6 +44,14 @@ final class GameConfig {
         themes = try GameConfig.load("themes", dir)
         items = try GameConfig.load("items", dir)
         evolutions = try GameConfig.load("evolutions", dir)
+        settlement = try GameConfig.load("settlement", dir)
+        cave = try GameConfig.load("cave", dir)
+        events = try GameConfig.load("events", dir)
+        benming = try GameConfig.load("benming", dir)
+        heartDemon = try GameConfig.load("heartDemon", dir)
+        dungeonAffixes = try GameConfig.load("dungeonAffixes", dir)
+        legendaries = try GameConfig.load("legendaries", dir)
+        fx = try GameConfig.load("fx", dir)
         try validate()
     }
 
@@ -125,6 +141,19 @@ final class GameConfig {
             if skills.def(ev.skill) == nil { problems.append("evolutions.json: \(ev.id) 引用的功法 \(ev.skill) 不存在") }
             if passives.def(ev.passive) == nil { problems.append("evolutions.json: \(ev.id) 引用的心法 \(ev.passive) 不存在") }
         }
+        dupCheck("events.json", events.events.map(\.id))
+        dupCheck("benming.json", benming.awakenings.map(\.id))
+        dupCheck("dungeonAffixes.json", dungeonAffixes.affixes.map(\.id))
+        dupCheck("legendaries.json", legendaries.legendaries.map(\.id))
+        dupCheck("cave.json", cave.upgrades.map(\.id) + cave.pills.map(\.id) + cave.daoxin.points.map(\.id))
+        for l in legendaries.legendaries {
+            if let s = l.skill, skills.def(s) == nil { problems.append("legendaries.json: \(l.id) 引用的功法 \(s) 不存在") }
+        }
+        for s in skills.skills where evolutions.forSkill(s.id) == nil {
+            problems.append("evolutions.json: 功法 \(s.id) 没有神通")
+        }
+        if fx.drops.count != items.qualities.count { problems.append("fx.json: drops 应和品质数量一致") }
+        if heartDemon.bands.first?.from != 0 { problems.append("heartDemon.json: 第一档应从 0 开始") }
         if !problems.isEmpty {
             throw ConfigError(description: "配置校验失败：\n" + problems.joined(separator: "\n"))
         }

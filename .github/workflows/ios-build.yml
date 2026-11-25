@@ -1,0 +1,51 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select newest Xcode
+        run: |
+          ls -d /Applications/Xcode*.app || true
+          XC=$(ls -d /Applications/Xcode_*.app 2>/dev/null | grep -vi beta | sort -V | tail -1)
+          if [ -z "$XC" ]; then XC=$(ls -d /Applications/Xcode*.app | sort -V | tail -1); fi
+          sudo xcode-select -s "$XC"
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        run: xcodegen generate
+
+      - name: Build app (device, no signing)
+        run: |
+          set +e
+          xcodebuild -project LunHui.xcodeproj -scheme LunHui -configuration Debug \
+            -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build > build.log 2>&1
+          echo "BUILD_STATUS=$?" >> "$GITHUB_ENV"
+          tail -5 build.log
+
+      - name: Run unit tests (simulator)
+        if: env.BUILD_STATUS == '0'
+        run: |
+          set +e
+          UDID=$(xcrun simctl list devices available | grep -E "iPhone .*Pro Max" | head -1 | grep -oE "[0-9A-F-]{36}")
+          if [ -z "$UDID" ]; then UDID=$(xcrun simctl list devices available | grep -E "iPhone" | head -1 | grep -oE "[0-9A-F-]{36}"); fi
+          echo "simulator: $UDID"
+          xcodebuild -project LunHui.xcodeproj -scheme LunHui -configuration Debug \
+            -destination "id=$UDID" CODE_SIGNING_ALLOWED=NO test > test.log 2>&1
+          echo "TEST_STATUS=$?" >> "$GITHUB_ENV"
+          tail -15 test.log
+
+      - name: Report
+        if: always()
+        run: python3 .github/scripts/report.py

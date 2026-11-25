@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "suHuiPerStage": 20,
+  "suHuiPerLevel": 5,
+  "suHuiClear": 200,
+  "suHuiTierBonus": 0.1,
+  "lingSuiBase": 10,
+  "lingSuiPerStage": 4,
+  "lingSuiTierBonus": 0.05,
+  "lingSuiClearMult": 1.5,
+  "lingSuiMin": 10,
+  "tierUnlockClear": 1,
+  "tierUnlockNoRevive": 3,
+  "autoSalvageQualities": ["fan", "ling"]
+}

@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "previewCount": 3,
+  "lowTierCount": 2,
+  "highTierCount": 3,
+  "highTierFrom": 10,
+  "freeRerolls": 1,
+  "affixes": [
+    { "id": "a_fire", "name": "火灵潮汐", "kind": "buff", "desc": "火系伤害 ×1.5", "elemMult": { "fire": 1.5 } },
+    { "id": "a_wood", "name": "万木逢春", "kind": "buff", "desc": "木系伤害 ×1.5", "elemMult": { "wood": 1.5 } },
+    { "id": "a_water", "name": "碧波荡漾", "kind": "buff", "desc": "水系伤害 ×1.5", "elemMult": { "water": 1.5 } },
+    { "id": "a_metal", "name": "金气纵横", "kind": "buff", "desc": "金系伤害 ×1.5", "elemMult": { "metal": 1.5 } },
+    { "id": "a_earth", "name": "厚德载物", "kind": "buff", "desc": "土系伤害 ×1.5", "elemMult": { "earth": 1.5 } },
+    { "id": "a_thunder", "name": "雷霆万钧", "kind": "buff", "desc": "雷系伤害 ×1.5，感电伤害 ×2", "elemMult": { "thunder": 1.5 }, "shockMult": 2 },
+    { "id": "a_ice", "name": "千里冰封", "kind": "buff", "desc": "冰系伤害 ×1.5，冰封碎裂伤害 ×2", "elemMult": { "ice": 1.5 }, "shatterMult": 2 },
+    { "id": "a_crit", "name": "天眼洞开", "kind": "buff", "desc": "暴击率 +15%，暴击伤害 +50%", "mods": [ { "stat": "critRate", "value": 0.15 }, { "stat": "critDmg", "value": 0.50 } ] },
+    { "id": "a_proj", "name": "万法归一", "kind": "buff", "desc": "额外投射物 +1", "mods": [ { "stat": "projCount", "value": 1 } ] },
+    { "id": "a_area", "name": "天地无极", "kind": "buff", "desc": "范围 +30%", "mods": [ { "stat": "area", "value": 0.30 } ] },
+    { "id": "a_status", "name": "五行流转", "kind": "buff", "desc": "所有功法的状态几率 +20%", "mods": [ { "stat": "statusChance", "value": 0.20 } ] },
+    { "id": "a_exp", "name": "顿悟之境", "kind": "buff", "desc": "修为获取 +40%", "mods": [ { "stat": "expPct", "value": 0.40 } ] },
+    { "id": "a_loot", "name": "福星高照", "kind": "buff", "desc": "法宝掉率 ×1.5", "dropFactor": 1.5 },
+    { "id": "c_explode", "name": "尸爆", "kind": "challenge", "desc": "小怪死亡时原地爆炸", "minionExplode": true, "reward": 0.20 },
+    { "id": "c_elite", "name": "精英群聚", "kind": "challenge", "desc": "精英数量 ×2", "eliteMult": 2, "reward": 0.25 },
+    { "id": "c_horde", "name": "妖潮汹涌", "kind": "challenge", "desc": "刷怪数 ×1.5", "spawnMult": 1.5, "reward": 0.20, "rewardExp": 0.30 },
+    { "id": "c_tough", "name": "铜皮铁骨", "kind": "challenge", "desc": "所有敌人生命 ×1.5", "hpMult": 1.5, "reward": 0.25 },
+    { "id": "c_fierce", "name": "凶性大发", "kind": "challenge", "desc": "所有敌人攻击 ×1.5", "atkMult": 1.5, "reward": 0.25 },
+    { "id": "c_swift", "name": "迅捷如风", "kind": "challenge", "desc": "所有敌人移速 ×1.3", "speedMult": 1.3, "reward": 0.15 }
+  ]
+}

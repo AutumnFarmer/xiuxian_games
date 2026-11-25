@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "max": 100,
+  "shadowAt": 70,
+  "bands": [
+    { "from": 0, "name": "清明", "exp": 0, "drop": 0, "mf": 0, "ls": 0, "color": "#FFFFFF" },
+    { "from": 20, "name": "微澜", "exp": 0.15, "drop": 0.10, "mf": 0.10, "ls": 0.10, "color": "#D1C4E9" },
+    { "from": 40, "name": "魔念", "exp": 0.30, "drop": 0.25, "mf": 0.25, "ls": 0.25, "color": "#B39DDB" },
+    { "from": 70, "name": "入魔", "exp": 0.50, "drop": 0.40, "mf": 0.40, "ls": 0.40, "color": "#7E57C2" },
+    { "from": 90, "name": "魔劫", "exp": 0.80, "drop": 0.60, "mf": 0.60, "ls": 0.60, "color": "#E040FB" }
+  ],
+  "shadowStrengthPer": 0.02,
+  "shadowHpMult": 1.5,
+  "shadowSkillDmg": 0.5,
+  "shadowTelegraph": 0.4,
+  "shadowUltInterval": 25,
+  "shadowSummonPenalty": 0.2,
+  "shadowRewardMult": 2,
+  "shadowExtraItemQuality": 4,
+  "shadowHundunChance": 0.1,
+  "shadowOrbit": 250,
+  "shadowSpeedFactor": 0.8,
+  "shadowMinionRate": 2
+}

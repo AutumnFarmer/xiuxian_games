@@ -46,6 +46,8 @@ final class BattleWorld {
     var drops: [Drop] = []
     var events: [BattleEvent] = []
     var skills: [SkillBehavior] = []
+    /// 功法以外的钩子：绝学、本命一击、全局传说特效。
+    var hooks: [WorldHook] = []
     let grid = SpatialGrid(cell: 64)
     var gridScratch: [Int32] = []
     private var nextId = 1
@@ -104,8 +106,24 @@ final class BattleWorld {
     var ultLocked = false
     /// 天魔解体：冷却和攻击间隔减半（7.3）。
     var fastCast = false
-    /// 心魔影子的行为（8.8），M6 设置。
+    /// 心魔影子的行为（8.8）。
     var shadowController: ShadowControlling?
+    /// 御兽：召唤物攻击间隔变化（7.1）。
+    var summonIntervalPct = 0.0
+    /// 法天象地：体修功法倍率 ×3、范围 ×1.5（7.3）。
+    var bodyForm = false
+    /// 百兽朝宗：召唤物伤害 ×2（7.3）。
+    var summonDmgMult = 1.0
+    /// 五行轮转：所有功法改为这个元素（12.5）。
+    var elementOverride: Element?
+    /// 绝学和本命一击的元素（6.5），由 RunController 设置。
+    var ultElement: Element = .fire
+    /// 防止连锁伤害无限递归（连爆、魔种等）。
+    var hitDepth = 0
+    /// 每关已经给过的心魔值（心魔噬天每关最多 +10）。
+    var stageDemonGained = 0
+    /// 心魔值变化回调（RunController 用来重算心魔区间）。
+    var onHeartDemonChanged: (() -> Void)?
     /// 场上活着的敌人数量（3.3 的上限用）。
     var aliveEnemies = 0
 
@@ -173,7 +191,9 @@ final class BattleWorld {
             player.hp = stats.hp
             ultCharge = cfg.balance.ult.max
         }
+        stageDemonGained = 0
         for sk in skills { sk.stageStarted(self) }
+        for h in hooks { h.stageStarted(self) }
     }
 
     // MARK: 主循环
@@ -187,6 +207,7 @@ final class BattleWorld {
         rebuildGrid()
         if phase == .fighting || phase == .clearing {
             for sk in skills { sk.update(self, dt: dt) }
+            for h in hooks { h.update(self, dt: dt) }
         }
         updateSummons()
         updateProjectiles()
@@ -268,6 +289,7 @@ final class BattleWorld {
         guard raw > 0, !playerInvulnerable, player.hp > 0 else { return }
         var d = raw * (1 - stats.dmgReduce)
         for sk in skills { d = sk.modifyIncomingDamage(self, d) }
+        for h in hooks { d = h.modifyIncomingDamage(self, d) }
         if player.shield > 0 {
             let absorbed = min(player.shield, d)
             player.shield -= absorbed
@@ -275,6 +297,7 @@ final class BattleWorld {
             if player.shield <= 0 {
                 player.shield = 0
                 for sk in skills { sk.shieldBroken(self) }
+                for h in hooks { h.shieldBroken(self) }
             }
         }
         player.invuln = cfg.balance.hitInvuln
@@ -282,6 +305,7 @@ final class BattleWorld {
         player.hp -= d
         events.append(.playerHurt(amount: d))
         for sk in skills { sk.playerHurt(self, amount: d) }
+        for h in hooks { h.playerHurt(self, amount: d) }
         if player.hp <= 0 { playerDied() }
     }
 
@@ -296,6 +320,8 @@ final class BattleWorld {
                 if enemies[i].pos.distSq(player.pos) <= r2 { killEnemy(i) }
             }
             events.append(.revive)
+            for sk in skills { sk.revived(self) }
+            for h in hooks { h.revived(self) }
             events.append(.nova(pos: player.pos, radius: cfg.balance.revive.radius, element: nil))
             events.append(.shake(2))
             events.append(.haptic(2))
@@ -448,4 +474,29 @@ struct ItemDropInfo {
 extension BattleWorld {
     func hasLegendary(_ id: String) -> Bool { legendaries[id] != nil }
     func legendaryParam(_ id: String, _ key: String) -> Double? { legendaries[id]?[key] }
+    func lp(_ id: String, _ key: String, _ d: Double) -> Double { legendaries[id]?[key] ?? d }
+
+    /// 法天象地：体修功法范围 ×1.5（7.3）。
+    func areaFactor(_ def: SkillDef) -> Double { bodyForm && def.school == .body ? 1.5 : 1 }
+
+    /// 随绝学变化的功法倍率：法天象地体修 ×3，百兽朝宗召唤 ×2（7.3）。
+    func skillFactor(_ hit: Hit) -> Double {
+        guard case .skill(let s) = hit.source, s >= 0, s < skills.count else { return 1 }
+        let d = skills[s].def
+        var f = 1.0
+        if bodyForm, d.school == .body { f *= 3 }
+        if d.has(.summon) { f *= summonDmgMult }
+        return f
+    }
+
+    /// 增加心魔值（10.1）：乘获取系数，向下取整，最高 100。
+    func addHeartDemon(_ amount: Int) {
+        let mx = cfg.heartDemon.max
+        if amount > 0 {
+            heartDemon = min(mx, heartDemon + Int((Double(amount) * heartDemonGain).rounded(.down)))
+        } else {
+            heartDemon = max(0, heartDemon + amount)
+        }
+        onHeartDemonChanged?()
+    }
 }

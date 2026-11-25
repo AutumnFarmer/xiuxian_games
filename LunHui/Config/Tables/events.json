@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "choices": 3,
+  "events": [
+    { "id": "e_spring", "name": "灵泉", "weight": 15, "desc": "回满生命，本世生命回复 +0.5%", "demon": 0, "healFull": true, "mods": [ { "stat": "regen", "value": 0.005 } ] },
+    { "id": "e_cave", "name": "古修洞府", "weight": 15, "desc": "获得 1 次顿悟", "demon": 0, "insights": 1 },
+    { "id": "e_merchant", "name": "云游商人", "weight": 10, "desc": "花费灵石，获得 1 件仙品以上法宝", "demon": 0, "costPerRealm": 100, "item": 3 },
+    { "id": "e_shrine", "name": "天道碑", "weight": 10, "desc": "本世暴击率 +5%，暴击伤害 +20%", "demon": 0, "mods": [ { "stat": "critRate", "value": 0.05 }, { "stat": "critDmg", "value": 0.20 } ] },
+    { "id": "e_herb", "name": "灵药", "weight": 10, "desc": "本世生命 +20%", "demon": 0, "mods": [ { "stat": "hpPct", "value": 0.20 } ] },
+    { "id": "e_demonpill", "name": "妖丹", "weight": 12, "desc": "本世攻击 +25%", "demon": 15, "mods": [ { "stat": "atkPct", "value": 0.25 } ] },
+    { "id": "e_blood", "name": "血祭", "weight": 10, "desc": "失去 30% 当前生命，本世全伤害 +30%", "demon": 10, "hpLoss": 0.3, "mods": [ { "stat": "dmgPct", "value": 0.30 } ] },
+    { "id": "e_ghost", "name": "古魔残魂", "weight": 8, "desc": "获得 2 次顿悟", "demon": 20, "insights": 2 },
+    { "id": "e_altar", "name": "魔道祭坛", "weight": 5, "desc": "获得 1 件神品以上法宝", "demon": 25, "item": 4 },
+    { "id": "e_calm", "name": "清心寺", "weight": 5, "desc": "心魔值 −20，回满生命", "demon": -20, "healFull": true, "minDemon": 20 }
+  ]
+}

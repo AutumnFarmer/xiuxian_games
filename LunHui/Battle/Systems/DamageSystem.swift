@@ -30,7 +30,7 @@ extension BattleWorld {
 
         let affixF = hit.element.map { affixElemMult[$0.index] } ?? 1
         let float = rng.range(cfg.balance.dmgFloatMin, cfg.balance.dmgFloatMax)
-        let dmg = stats.atk * hit.mult * inc * critF * counterF * vuln * affixF * float * globalDmgMult
+        let dmg = stats.atk * hit.mult * inc * critF * counterF * vuln * affixF * float * globalDmgMult * skillFactor(hit)
         return (dmg, crit)
     }
 
@@ -50,10 +50,14 @@ extension BattleWorld {
 
     // MARK: 造成伤害
 
-    /// 对敌人 i 造成一次玩家阵营伤害（5.4）。src 是击退的来源位置。返回实际伤害。
+    /// 对敌人 i 造成一次玩家阵营伤害（5.4）。src 是击退的来源位置。
     @discardableResult
-    func damageEnemy(_ i: Int, _ hit: Hit, from src: Vec2? = nil) -> Double {
-        guard i >= 0, i < enemies.count, !enemies[i].dead else { return 0 }
+    func damageEnemy(_ i: Int, _ hitIn: Hit, from src: Vec2? = nil) -> HitResult {
+        guard i >= 0, i < enemies.count, !enemies[i].dead, hitDepth < 8 else { return HitResult() }
+        hitDepth += 1
+        defer { hitDepth -= 1 }
+        var hit = hitIn
+        if let o = elementOverride, hit.element != nil, case .skill = hit.source { hit.element = o }
         let (dmg, crit) = computeDamage(hit, on: enemies[i])
         applyDamage(i, dmg)
         events.append(.damage(pos: enemies[i].pos, amount: dmg, crit: crit, element: hit.element, dot: false, targetId: enemies[i].id))
@@ -69,9 +73,11 @@ extension BattleWorld {
                 applyStatus(i, el, hitDamage: dmg)
             }
         }
-        for b in skills { b.didHit(self, enemy: i, damage: dmg, crit: crit, hit: hit) }
-        if enemies[i].hp <= 0 { killEnemy(i) }
-        return dmg
+        let result = HitResult(damage: dmg, crit: crit, killed: enemies[i].hp <= 0)
+        for b in skills { b.didHit(self, enemy: i, result: result, hit: hit) }
+        for h in hooks { h.didHit(self, enemy: i, result: result, hit: hit) }
+        if enemies[i].hp <= 0, !enemies[i].dead { killEnemy(i, by: hit) }
+        return result
     }
 
     /// 固定伤害：灼烧、感电、碎裂等（6.4）。不暴击，不乘其他系数。
