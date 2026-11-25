@@ -58,7 +58,7 @@ struct BattleHUD: View {
 
     private var topRow: some View {
         HStack(alignment: .top) {
-            leftInfo.allowsHitTesting(false)
+            leftInfo.allowsHitTesting(false).layoutPriority(1)
             Spacer()
             centerInfo.allowsHitTesting(false)
             Spacer()
@@ -87,11 +87,13 @@ struct BattleHUD: View {
                 .frame(width: 170)
                 HStack(spacing: 6) {
                     Text("Lv.\(hud.level)").font(.system(size: 12, weight: .heavy).monospacedDigit()).foregroundStyle(Color.lhGold)
+                        .lineLimit(1).fixedSize()
                     Bar(frac: hud.expFrac, color: Color(hex: "#64FFDA"), height: 6).frame(width: 110)
                 }
                 HStack(spacing: 4) {
                     Image(systemName: "flame.fill").font(.system(size: 10))
                     Text("心魔 \(hud.heartDemon) · \(hud.demonBand)").font(.system(size: 11, weight: .bold))
+                        .lineLimit(1).fixedSize()
                 }
                 .foregroundStyle(Color(hex: hud.demonColor))
                 if hud.revives > 0 {

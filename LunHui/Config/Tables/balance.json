@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "tierEnemyBase": 1.15,
+  "tierEnemyBase": 1.2,
   "tierItemBase": 1.14,
   "expNeedBase": 10,
   "expNeedPerLevel": 16,
@@ -22,11 +22,38 @@
   "meleeRange": 200,
   "enemyNeighborCheck": 6,
   "enemyRespawnDistance": 900,
-  "recommendPowerBase": 3000,
-  "revive": { "radius": 300, "invuln": 2.0 },
-  "levelWave": { "radius": 150, "mult": 2.0, "knockback": 60 },
-  "stage": { "normalDuration": 90, "bossPrelude": 20, "normalHeal": 0.5, "clearDuration": 0.5, "bossIntro": 1.5 },
-  "caps": { "enemies": 300, "projectiles": 400, "damageTexts": 60, "drops": 150, "zones": 300 },
-  "ult": { "perKill": 0.5, "perElite": 10, "perBossPct": 1, "max": 100 },
-  "joystick": { "deadZone": 12, "radius": 50 }
+  "recommendPowerBase": 2500,
+  "revive": {
+    "radius": 300,
+    "invuln": 2.0
+  },
+  "levelWave": {
+    "radius": 150,
+    "mult": 2.0,
+    "knockback": 60
+  },
+  "stage": {
+    "normalDuration": 90,
+    "bossPrelude": 20,
+    "normalHeal": 0.5,
+    "clearDuration": 0.5,
+    "bossIntro": 1.5
+  },
+  "caps": {
+    "enemies": 300,
+    "projectiles": 400,
+    "damageTexts": 60,
+    "drops": 150,
+    "zones": 300
+  },
+  "ult": {
+    "perKill": 0.5,
+    "perElite": 10,
+    "perBossPct": 1,
+    "max": 100
+  },
+  "joystick": {
+    "deadZone": 12,
+    "radius": 50
+  }
 }

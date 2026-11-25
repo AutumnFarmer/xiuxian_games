@@ -1,6 +1,6 @@
 import XCTest
 
-/// 冒烟测试：从第一次启动一路点到战斗，打完第一关，截图存进测试结果。
+/// 冒烟测试：从第一次启动一路点到战斗，打完练气三关（含第一个 Boss），沿途截图存进测试结果。
 /// CI 会把截图推到 ci-screenshots 分支，方便检查界面。
 final class SmokeUITests: XCTestCase {
     override func setUp() {
@@ -14,7 +14,7 @@ final class SmokeUITests: XCTestCase {
         add(a)
     }
 
-    func testFirstStage() {
+    func testFirstRealm() {
         let app = XCUIApplication()
         app.launch()
 
@@ -40,46 +40,62 @@ final class SmokeUITests: XCTestCase {
         sleep(3)
         shot(app, "04_battle_start")
 
-        var insightShots = 0
-        var midShot = false
-        var lootSeen = false
+        var taken = Set<String>()
+        func once(_ name: String) {
+            guard !taken.contains(name) else { return }
+            taken.insert(name)
+            shot(app, name)
+        }
+        var insights = 0
+        var stagesDone = 0
         var k = 0
-        let deadline = Date().addingTimeInterval(240)
-        while Date() < deadline {
+        var bossSeenAt = -1
+        let began = Date()
+        while Date().timeIntervalSince(began) < 480 {
             if app.buttons["insight-card-0"].exists {
-                if insightShots < 2 { shot(app, "05_insight_\(insightShots)"); insightShots += 1 }
+                if insights < 2 { shot(app, "05_insight_\(insights)") }
+                insights += 1
                 app.buttons["insight-card-0"].tap()
                 continue
             }
             if app.buttons["loot-continue"].exists {
-                shot(app, "07_loot")
-                lootSeen = true
+                stagesDone += 1
+                once("07_loot_stage\(stagesDone)")
                 app.buttons["loot-continue"].tap()
                 continue
             }
             if app.buttons["event-0"].exists {
-                shot(app, "08_event")
-                app.buttons["event-0"].tap()
-                break
+                once("08_event_stage\(stagesDone)")
+                // 灵石不够的机缘是禁用的，挑第一张能选的
+                for i in 0..<3 {
+                    let b = app.buttons["event-\(i)"]
+                    if b.exists, b.isEnabled {
+                        b.tap()
+                        break
+                    }
+                }
+                continue
             }
             if app.buttons["death-confirm"].exists {
                 shot(app, "09_death")
                 break
             }
+            if stagesDone >= 3 { break }
             // 摇杆：从屏幕中下方朝不同方向拖动并按住
             let a = Double(k) * 1.1
             let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.62))
             let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5 + 0.16 * cos(a), dy: 0.62 + 0.08 * sin(a)))
             from.press(forDuration: 0.05, thenDragTo: to, withVelocity: .default, thenHoldForDuration: 1.2)
             k += 1
-            if k == 8, !midShot {
-                shot(app, "06_battle_mid")
-                midShot = true
-            }
+            if k == 10 { once("06_battle_stage1_a") }
+            if k == 30 { once("06_battle_stage1_b") }
+            if stagesDone == 1, k % 15 == 0 { once("06_battle_stage2") }
+            if bossSeenAt < 0, app.staticTexts["啸月狼王"].exists { bossSeenAt = k }
+            if bossSeenAt >= 0, k == bossSeenAt + 3 { once("12_boss_fight") }
         }
-        XCTAssertTrue(lootSeen, "第一关没有打完")
-        sleep(3)
-        shot(app, "10_stage2")
+        XCTAssertGreaterThanOrEqual(stagesDone, 1, "第一关没有打完")
+        sleep(2)
+        shot(app, "10_after_loop")
         if pause.exists, pause.isHittable {
             pause.tap()
             sleep(1)

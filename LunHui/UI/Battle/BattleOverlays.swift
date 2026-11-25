@@ -195,6 +195,7 @@ struct EventOverlay: View {
                             .opacity(afford ? 1 : 0.45)
                         }
                         .buttonStyle(.plain)
+                        .disabled(!afford)
                         .accessibilityIdentifier("event-\(idx)")
                     }
                 }

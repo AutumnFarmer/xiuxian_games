@@ -47,7 +47,7 @@ final class PacingTests: XCTestCase {
                          save.items.filter { $0.quality == "shen" }.count, save.items.filter { $0.quality == "hundun" }.count,
                          save.maxTierUnlocked))
             _ = report
-            print("CSV,\(life),\(tier),\(rep.cleared ? 1 : 0),\(rep.stagesDone),\(startPower),\(StatAssembler.recommendedPower(cfg, tier: tier)),\(rep.usedReviveFlag ? 1 : 0),\(rep.result?.heartDemon ?? 0),\(rep.result?.shadowKilled == true ? 1 : 0)")
+            print("CSV,\(life),\(tier),\(rep.cleared ? 1 : 0),\(rep.stagesDone),\(startPower),\(StatAssembler.recommendedPower(cfg, tier: tier)),\(rep.usedReviveFlag ? 1 : 0),\(rep.result?.heartDemon ?? 0),\(rep.result?.shadowKilled == true ? 1 : 0),\(rep.timedOut ? 1 : 0),\(Int(rep.finalStageSeconds)),\(rep.bossTimes.map { String(Int($0)) }.joined(separator: "/"))")
             // 下一世：通关就往上推，死了就退一劫
             if rep.cleared {
                 tier = save.maxTierUnlocked

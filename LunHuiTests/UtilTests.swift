@@ -60,7 +60,9 @@ final class UtilTests: XCTestCase {
     func testConfigLoads() {
         let cfg = TestConfig.shared
         XCTAssertEqual(cfg.balance.enemyScale(tier: 1), 1)
-        XCTAssertEqual(cfg.balance.enemyScale(tier: 100), 1.0e6, accuracy: 0.05e6)
+        XCTAssertEqual(cfg.balance.enemyScale(tier: 11), pow(cfg.balance.tierEnemyBase, 10), accuracy: 1e-9)
+        // 11.1：法宝强度涨得比怪物慢，形成软上限
+        XCTAssertGreaterThan(cfg.balance.tierEnemyBase, cfg.balance.tierItemBase)
         XCTAssertEqual(cfg.balance.expNeed(level: 1), 10)
         XCTAssertEqual(cfg.balance.expNeed(level: 2), 26)
         XCTAssertEqual(cfg.skills.pool(for: .sword).count, 8)

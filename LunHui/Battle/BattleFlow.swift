@@ -26,6 +26,10 @@ final class BattleFlow {
     @ObservationIgnored private var pausedFrom: Phase = .fighting
     @ObservationIgnored private var hudTimer = 0.0
     @ObservationIgnored private var lastDemon = 0
+    /// 过关后本关拾取已经写进 RunState，HUD 不再重复加上本关的数。
+    @ObservationIgnored private var stageCommitted = false
+    /// HUD 显示的关卡序号：下一关真正开始时才更新。
+    @ObservationIgnored private var displayStage = 0
     /// 每关开始时回调（表现层切换音乐）。
     @ObservationIgnored var onStageStart: ((StageKind) -> Void)?
 
@@ -37,6 +41,7 @@ final class BattleFlow {
         self.rc = rc
         self.app = app
         lastDemon = rc.run.heartDemon
+        displayStage = rc.run.stageIndex
     }
 
     // MARK: 开始
@@ -60,6 +65,8 @@ final class BattleFlow {
         }
         preStage = false
         rc.startStage()
+        stageCommitted = false
+        displayStage = rc.run.stageIndex
         onStageStart?(world.setup.kind)
         app?.saveRunCheckpoint()
         let i = rc.run.stageIndex
@@ -90,6 +97,7 @@ final class BattleFlow {
             onDeath?()
         case .cleared:
             rc.finishStage()
+            stageCommitted = true
             app?.saveRunCheckpoint()
             if rc.run.finished {
                 phase = .finished
@@ -127,10 +135,10 @@ final class BattleFlow {
         let band = cfg.heartDemon.band(w.heartDemon)
         h.set(\.demonBand, band.name)
         h.set(\.demonColor, band.color)
-        h.set(\.stageTitle, rc.stageTitle())
+        h.set(\.stageTitle, hudStageTitle)
         h.set(\.kills, w.kills)
-        h.set(\.lingShi, (rc.run.lingShiGained + w.stageLingShi).rounded())
-        h.set(\.items, rc.run.loot.count + w.stageItemCount)
+        h.set(\.lingShi, (rc.run.lingShiGained + (stageCommitted ? 0 : w.stageLingShi)).rounded())
+        h.set(\.items, rc.run.loot.count + (stageCommitted ? 0 : w.stageItemCount))
         h.set(\.revives, w.revivesLeft)
         switch w.setup.kind {
         case .normal:
@@ -168,6 +176,16 @@ final class BattleFlow {
         h.set(\.ultActive, u?.isActive ?? false)
         h.set(\.ultName, cfg.schools.def(rc.run.school).ultName)
         _ = force
+    }
+
+    private var hudStageTitle: String {
+        let realm = cfg.enemies.realms[min(4, displayStage / 3)].name
+        switch world.setup.kind {
+        case .tribulation: return "\(realm)·天劫"
+        case .shadow: return "\(realm)·心魔"
+        case .boss: return "\(realm)·劫关"
+        case .normal: return "\(realm)·第 \(displayStage % 3 + 1) 关"
+        }
     }
 
     // MARK: 操作

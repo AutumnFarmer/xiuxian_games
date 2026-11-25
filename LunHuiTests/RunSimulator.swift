@@ -16,6 +16,8 @@ struct RunSimulator {
         var insights = 0
         var bossTimes: [Double] = []
         var deathStage = -1
+        var timedOut = false
+        var finalStageSeconds = 0.0
         var result: RunResult?
         var usedReviveFlag: Bool { result?.usedRevive ?? false }
     }
@@ -65,7 +67,9 @@ struct RunSimulator {
             }
             rep.seconds += t
             if kind == .boss, bossStart >= 0, w.phase == .cleared { rep.bossTimes.append(t - bossStart) }
+            if kind == .shadow || kind == .tribulation { rep.finalStageSeconds = t }
             if w.phase != .cleared {
+                rep.timedOut = w.phase != .dead
                 rep.died = true
                 rep.deathStage = rc.run.stageIndex
                 rc.endRun()

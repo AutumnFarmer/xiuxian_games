@@ -3,14 +3,54 @@
   "max": 100,
   "shadowAt": 70,
   "bands": [
-    { "from": 0, "name": "清明", "exp": 0, "drop": 0, "mf": 0, "ls": 0, "color": "#FFFFFF" },
-    { "from": 20, "name": "微澜", "exp": 0.15, "drop": 0.10, "mf": 0.10, "ls": 0.10, "color": "#D1C4E9" },
-    { "from": 40, "name": "魔念", "exp": 0.30, "drop": 0.25, "mf": 0.25, "ls": 0.25, "color": "#B39DDB" },
-    { "from": 70, "name": "入魔", "exp": 0.50, "drop": 0.40, "mf": 0.40, "ls": 0.40, "color": "#7E57C2" },
-    { "from": 90, "name": "魔劫", "exp": 0.80, "drop": 0.60, "mf": 0.60, "ls": 0.60, "color": "#E040FB" }
+    {
+      "from": 0,
+      "name": "清明",
+      "exp": 0,
+      "drop": 0,
+      "mf": 0,
+      "ls": 0,
+      "color": "#FFFFFF"
+    },
+    {
+      "from": 20,
+      "name": "微澜",
+      "exp": 0.15,
+      "drop": 0.1,
+      "mf": 0.1,
+      "ls": 0.1,
+      "color": "#D1C4E9"
+    },
+    {
+      "from": 40,
+      "name": "魔念",
+      "exp": 0.3,
+      "drop": 0.25,
+      "mf": 0.25,
+      "ls": 0.25,
+      "color": "#B39DDB"
+    },
+    {
+      "from": 70,
+      "name": "入魔",
+      "exp": 0.5,
+      "drop": 0.4,
+      "mf": 0.4,
+      "ls": 0.4,
+      "color": "#7E57C2"
+    },
+    {
+      "from": 90,
+      "name": "魔劫",
+      "exp": 0.8,
+      "drop": 0.6,
+      "mf": 0.6,
+      "ls": 0.6,
+      "color": "#E040FB"
+    }
   ],
   "shadowStrengthPer": 0.02,
-  "shadowHpMult": 1.5,
+  "shadowHpMult": 1.2,
   "shadowSkillDmg": 0.5,
   "shadowTelegraph": 0.4,
   "shadowUltInterval": 25,
