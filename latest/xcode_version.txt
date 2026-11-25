@@ -1,0 +1,6 @@
+Xcode 26.6
+Build version 17F113
+iOS 26.2 (26.2 - 23C54) - com.apple.CoreSimulator.SimRuntime.iOS-26-2
+iOS 26.4 (26.4.1 - 23E254a) - com.apple.CoreSimulator.SimRuntime.iOS-26-4
+iOS 26.5 (26.5 - 23F77) - com.apple.CoreSimulator.SimRuntime.iOS-26-5
+    iPhone 17 Pro Max (F90353E4-F95D-488C-9F4E-B43F74E385F2) (Shutdown) 
